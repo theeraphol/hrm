@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="text-2xl font-bold mb-4"><i class="fa-solid fa-list mr-2"></i>รายการคิว</h1>
+<ul class="divide-y divide-gray-200 mb-3">
+  {% for q in queues %}
+  <li class="py-2 flex items-center gap-2"><i class="fa-solid fa-user"></i>{{ q['number'] }} - {{ q['id_card'] }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}
