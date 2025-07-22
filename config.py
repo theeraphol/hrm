@@ -14,7 +14,7 @@ class Config:
     DB_USER = os.environ.get('MYSQL_USER', 'root')
     # กำหนดรหัสผ่านฐานข้อมูลผ่านตัวแปรสภาพแวดล้อม
     # รองรับตัวแปรเดิมที่อาจยังใช้งานอยู่ด้วย
-    DB_PASSWORD = os.environ.get('MYSQL_PASSWORD') or os.environ.get('MYSQL_PW')
+    DB_PASSWORD = os.environ.get('MYSQL_PASSWORD','987654321') or os.environ.get('MYSQL_PW')
     # ค่าดีฟอลต์ตรงกับฐานข้อมูลที่สร้างจาก schema.sql
     DB_NAME = os.environ.get('MYSQL_DB', 'hrm')
     # Optional path to mysqldump for backup service
