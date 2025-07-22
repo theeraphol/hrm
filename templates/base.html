@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    body { font-family: 'Noto Sans Thai', sans-serif; }
+  </style>
+  <title>{{ title or 'Service Queue' }}</title>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-900 via-blue-800 to-blue-700 text-gray-800">
+  <div class="bg-white/70 backdrop-blur-md shadow-2xl rounded-xl p-8 w-full max-w-xl">
+    <nav class="flex items-center justify-between mb-6 text-sm text-blue-900">
+      <div class="flex gap-4 font-semibold">
+        <a href="{{ url_for('service_queue.index') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-house"></i>หน้าหลัก</a>
+        {% if session.get('staff_user') %}
+        <a href="{{ url_for('service_queue.staff') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-list"></i>รายการคิว</a>
+        {% else %}
+        <a href="{{ url_for('service_queue.login') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-right-to-bracket"></i>เข้าสู่ระบบ</a>
+        {% endif %}
+      </div>
+      <div class="flex items-center gap-2">
+        {% if session.get('staff_user') %}
+        <span class="text-sm"><i class="fa-solid fa-user mr-1"></i>{{ session.staff_user }}</span>
+        {% endif %}
+        <span class="text-xs">v{{ app_version }}</span>
+      </div>
+    </nav>
+    {% block body %}{% endblock %}
+    <footer class="mt-6 text-center text-xs text-gray-600">Service Queue {{ app_version }}</footer>
+  </div>
+</body>
+</html>
