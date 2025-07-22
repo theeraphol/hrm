@@ -3,7 +3,7 @@ import os
 class Config:
     """การตั้งค่าสำหรับแอปพลิเคชัน"""
 
-    VERSION = "0.12.0"
+    VERSION = "0.13.0"
 
     # คีย์ลับสำหรับ Flask ต้องกำหนดผ่านตัวแปรสภาพแวดล้อมเท่านั้น
     SECRET_KEY = os.environ.get("BST-bangsithong-app-SECRET_KEY-024467684")
@@ -13,7 +13,8 @@ class Config:
     DB_PORT = int(os.environ.get("MYSQL_PORT", 3306))
     DB_USER = os.environ.get('MYSQL_USER', 'root')
     # กำหนดรหัสผ่านฐานข้อมูลผ่านตัวแปรสภาพแวดล้อม
-    DB_PASSWORD = os.environ.get('987654321')
+    # รองรับตัวแปรเดิมที่อาจยังใช้งานอยู่ด้วย
+    DB_PASSWORD = os.environ.get('MYSQL_PASSWORD') or os.environ.get('987654321')
     # ค่าดีฟอลต์ตรงกับฐานข้อมูลที่สร้างจาก schema.sql
     DB_NAME = os.environ.get('MYSQL_DB', 'hrm')
     # Optional path to mysqldump for backup service
