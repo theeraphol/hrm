@@ -170,6 +170,14 @@ def projects():
         return redirect(url_for('hrm.login'))
     return render_template('projects.html', title='โครงการ')
 
+# ----- Backup -----
+
+@bp.route('/backup')
+def backup():
+    if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+    return render_template('backup.html', title='สำรองข้อมูล')
+
 # ----- About -----
 
 @bp.route('/about')
