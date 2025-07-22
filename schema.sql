@@ -1,73 +1,69 @@
--- Municipality queue database schema
--- สร้างฐานข้อมูล
-CREATE DATABASE IF NOT EXISTS municipality_queue_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE municipality_queue_db;
+-- HRM database schema
+CREATE DATABASE IF NOT EXISTS hrm CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE hrm;
 
--- ตารางผู้มารับบริการ
-CREATE TABLE citizens (
+-- ข้อมูลบุคลากร
+CREATE TABLE staff (
     id INT AUTO_INCREMENT PRIMARY KEY,
     national_id CHAR(13) NOT NULL UNIQUE,
-    full_name VARCHAR(100) NOT NULL,
-    birth_date DATE,
-    address TEXT,
-    phone_number VARCHAR(20),
+    full_name VARCHAR(100),
+    position VARCHAR(100),
+    department VARCHAR(100),
+    start_date DATE,
     email VARCHAR(100),
-    person_type ENUM('ทั่วไป', 'ผู้สูงอายุ', 'ผู้พิการ', 'ข้าราชการ', 'ตัวแทน') DEFAULT 'ทั่วไป'
+    phone VARCHAR(20)
 );
 
--- ตารางหน่วยงาน (กอง/ฝ่าย)
-CREATE TABLE departments (
+-- บันทึกเวลาเข้างาน/ออกงาน
+CREATE TABLE attendances (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    description TEXT
-);
-
--- ตารางประเภทงานบริการ (ระดับกลาง)
-CREATE TABLE services (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    department_id INT NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    description TEXT,
-    FOREIGN KEY (department_id) REFERENCES departments(id)
-);
-
--- ตารางหัวข้อย่อยของบริการ (งานเฉพาะ)
-CREATE TABLE service_topics (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    service_id INT NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    description TEXT,
-    FOREIGN KEY (service_id) REFERENCES services(id)
-);
-
--- ตารางคิวและการให้บริการ
-CREATE TABLE queues (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    citizen_id INT NOT NULL,
-    department_id INT NOT NULL,
-    service_id INT NOT NULL,
-    service_topic_id INT,
-    queue_number VARCHAR(10) NOT NULL,
-    service_date DATE NOT NULL,
+    staff_id INT NOT NULL,
     checkin_time DATETIME,
-    called_time DATETIME,
-    service_time_start DATETIME,
-    service_time_end DATETIME,
-    service_status ENUM('รอเรียก', 'ให้บริการแล้ว', 'ยกเลิก', 'ไม่มา') DEFAULT 'รอเรียก',
-    service_channel ENUM('มาหน้าเคาน์เตอร์', 'จองผ่านแอป', 'โทรศัพท์', 'ตู้คีออส') DEFAULT 'มาหน้าเคาน์เตอร์',
-    staff_name VARCHAR(100),
-    FOREIGN KEY (citizen_id) REFERENCES citizens(id),
-    FOREIGN KEY (department_id) REFERENCES departments(id),
-    FOREIGN KEY (service_id) REFERENCES services(id),
-    FOREIGN KEY (service_topic_id) REFERENCES service_topics(id)
+    checkout_time DATETIME,
+    note TEXT,
+    FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
 
--- ตารางความคิดเห็นและประเมินผล
-CREATE TABLE feedbacks (
+-- การลา
+CREATE TABLE leaves (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    queue_id INT NOT NULL,
-    satisfaction_score INT CHECK (satisfaction_score BETWEEN 1 AND 5),
-    feedback_comment TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (queue_id) REFERENCES queues(id)
+    staff_id INT NOT NULL,
+    start_date DATE,
+    end_date DATE,
+    leave_type ENUM('ลาป่วย','ลากิจ','ลาพักร้อน','อื่นๆ') DEFAULT 'ลากิจ',
+    reason TEXT,
+    status ENUM('รอดำเนินการ','อนุมัติ','ไม่อนุมัติ') DEFAULT 'รอดำเนินการ',
+    FOREIGN KEY (staff_id) REFERENCES staff(id)
+);
+
+-- อบรม/ดูงาน
+CREATE TABLE trainings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    staff_id INT NOT NULL,
+    topic VARCHAR(200),
+    place VARCHAR(200),
+    start_date DATE,
+    end_date DATE,
+    description TEXT,
+    FOREIGN KEY (staff_id) REFERENCES staff(id)
+);
+
+-- กิจกรรมอื่น ๆ
+CREATE TABLE activities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    staff_id INT NOT NULL,
+    activity_name VARCHAR(200),
+    activity_date DATE,
+    description TEXT,
+    FOREIGN KEY (staff_id) REFERENCES staff(id)
+);
+
+-- พฤติกรรม/หมายเหตุ
+CREATE TABLE behaviors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    staff_id INT NOT NULL,
+    behavior_date DATE,
+    description TEXT,
+    note TEXT,
+    FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
