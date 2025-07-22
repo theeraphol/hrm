@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="text-center">
+  <h1 class="text-3xl font-semibold mb-6 text-blue-800"><i class="fa-solid fa-qrcode mr-2"></i>จองบัตรคิว</h1>
+  <form method="post" action="{{ url_for('service_queue.book') }}" class="space-y-5">
+    <div>
+      <label class="block text-sm font-medium mb-2"><i class="fa-solid fa-building mr-1"></i>เลือกหน่วยงาน</label>
+      <div class="flex flex-wrap gap-2 justify-center">
+        {% for d in departments %}
+        <div>
+          <input type="radio" id="dept{{ d['id'] }}" name="department_id" value="{{ d['id'] }}" class="peer hidden" required>
+          <label for="dept{{ d['id'] }}" class="block px-4 py-2 border rounded cursor-pointer transition-colors peer-checked:bg-blue-700 peer-checked:text-white peer-checked:ring peer-checked:ring-blue-300">
+            <i class="fa-solid fa-building mr-1"></i>{{ d['name'] }}
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-2"><i class="fa-solid fa-id-card mr-1"></i>หมายเลขบัตรประชาชน</label>
+      <input type="text" name="id_card" class="border border-gray-300 rounded px-3 py-2 w-full" required>
+    </div>
+    <button type="submit" class="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800"><i class="fa-solid fa-ticket mr-1"></i>จองคิว</button>
+  </form>
+</div>
+{% endblock %}
