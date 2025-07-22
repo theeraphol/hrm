@@ -19,6 +19,7 @@
       <div class="flex gap-4 font-semibold">
         <a href="{{ url_for('hrm.index') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-house"></i>หน้าหลัก</a>
         {% if session.get('staff_user') %}
+        <a href="{{ url_for('hrm.staff') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-address-card"></i>บุคลากร</a>
         <a href="{{ url_for('hrm.attendance') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-clock"></i>บันทึกเวลา</a>
         {% else %}
         <a href="{{ url_for('hrm.login') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-right-to-bracket"></i>เข้าสู่ระบบ</a>

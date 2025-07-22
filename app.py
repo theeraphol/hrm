@@ -146,6 +146,22 @@ def attendance():
             conn.close()
     return render_template('attendance.html', message=message, title='บันทึกเวลา')
 
+# ----- Staff Management -----
+
+@bp.route('/staff')
+def staff():
+    if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute('SELECT id, national_id, full_name, position FROM staff ORDER BY id')
+            rows = cur.fetchall()
+    finally:
+        conn.close()
+    return render_template('staff.html', staff_list=rows, title='ข้อมูลบุคลากร')
+
 app.register_blueprint(bp)
 
 @app.route('/')
