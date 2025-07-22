@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="text-2xl font-bold mb-4"><i class="fa-solid fa-bullhorn mr-2"></i>เรียกคิว</h1>
+<form method="post" class="mb-3">
+  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded"><i class="fa-solid fa-forward mr-1"></i>เรียกคิวถัดไป</button>
+</form>
+<p><i class='fa-solid fa-bell mr-1'></i>{{ message }}</p>
+{% endblock %}
