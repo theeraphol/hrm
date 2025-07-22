@@ -13,27 +13,53 @@
   </style>
   <title>{{ title or 'HRM' }}</title>
 </head>
-<body class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-900 via-blue-800 to-blue-700 text-gray-800">
-  <div class="bg-white/70 backdrop-blur-md shadow-2xl rounded-xl p-8 w-full max-w-xl">
-    <nav class="flex items-center justify-between mb-6 text-sm text-blue-900">
-      <div class="flex gap-4 font-semibold">
-        <a href="{{ url_for('hrm.index') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-house"></i>หน้าหลัก</a>
-        {% if session.get('staff_user') %}
-        <a href="{{ url_for('hrm.staff') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-address-card"></i>บุคลากร</a>
-        <a href="{{ url_for('hrm.attendance') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-clock"></i>บันทึกเวลา</a>
-        {% else %}
-        <a href="{{ url_for('hrm.login') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-right-to-bracket"></i>เข้าสู่ระบบ</a>
-        {% endif %}
-      </div>
-      <div class="flex items-center gap-2">
-        {% if session.get('staff_user') %}
-        <span class="text-sm"><i class="fa-solid fa-user mr-1"></i>{{ session.staff_user }}</span>
-        {% endif %}
-        <span class="text-xs">v{{ app_version }}</span>
-      </div>
+<body class="flex min-h-screen bg-gray-100 text-slate-700">
+  <aside class="w-64 bg-white shadow-lg fixed inset-y-0 flex flex-col z-10">
+    <div class="h-16 flex items-center px-6 font-bold text-blue-600 border-b">
+      <i class="fa-solid fa-users mr-2"></i> HRM
+    </div>
+    <nav class="flex-1 overflow-y-auto px-4 py-6 text-sm">
+      <ul class="space-y-2">
+        <li>
+          <a href="{{ url_for('hrm.index') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
+            <i class="fa-solid fa-table-columns text-blue-500"></i> Dashboard
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('hrm.staff') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
+            <i class="fa-solid fa-address-card text-emerald-600"></i> บุคลากร
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('hrm.attendance') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
+            <i class="fa-solid fa-clock text-orange-500"></i> บันทึกเวลา
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('hrm.projects') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
+            <i class="fa-solid fa-folder-open text-indigo-500"></i> โครงการ
+          </a>
+        </li>
+      </ul>
     </nav>
-    {% block body %}{% endblock %}
-    <footer class="mt-6 text-center text-xs text-gray-600">HRM {{ app_version }}</footer>
+    <div class="p-4 text-center text-xs text-gray-500 border-t">v{{ app_version }}</div>
+  </aside>
+  <div class="flex-1 ml-64 flex flex-col min-h-screen">
+    <header class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
+      <h1 class="font-semibold">{{ title }}</h1>
+      <div class="flex items-center gap-4 text-sm">
+        {% if session.get('staff_user') %}
+          <span><i class="fa-solid fa-user mr-1"></i>{{ session.staff_user }}</span>
+        {% endif %}
+        <a href="{{ url_for('hrm.login') }}" class="underline">
+          {% if session.get('staff_user') %}ออกจากระบบ{% else %}<i class="fa-solid fa-right-to-bracket mr-1"></i>เข้าสู่ระบบ{% endif %}
+        </a>
+      </div>
+    </header>
+    <main class="p-6 flex-1">
+      {% block body %}{% endblock %}
+    </main>
+    <footer class="text-center text-xs text-gray-500 py-4 border-t">HRM {{ app_version }}</footer>
   </div>
 </body>
 </html>

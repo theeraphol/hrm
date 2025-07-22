@@ -162,6 +162,14 @@ def staff():
         conn.close()
     return render_template('staff.html', staff_list=rows, title='ข้อมูลบุคลากร')
 
+# ----- Projects -----
+
+@bp.route('/projects')
+def projects():
+    if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+    return render_template('projects.html', title='โครงการ')
+
 app.register_blueprint(bp)
 
 @app.route('/')
