@@ -2,31 +2,9 @@
 {% block body %}
 <div class="text-center space-y-6">
   <h1 class="text-4xl font-bold text-blue-900 flex items-center justify-center gap-2">
-    <i class="fa-solid fa-building-columns"></i>
-    <span>ระบบจองคิว</span>
+    <i class="fa-solid fa-users"></i>
+    <span>ระบบงานการเจ้าหน้าที่</span>
   </h1>
-  <form method="post" action="{{ url_for('service_queue.book') }}" class="space-y-6">
-    <div>
-      <label class="block text-sm font-medium mb-2"><i class="fa-solid fa-building mr-1"></i>เลือกหน่วยงาน</label>
-      <div class="grid grid-cols-2 gap-2">
-        {% for d in departments %}
-        <div>
-          <input type="radio" id="dept{{ d['id'] }}" name="department_id" value="{{ d['id'] }}" class="peer hidden" required>
-          <label for="dept{{ d['id'] }}" class="block px-4 py-2 border rounded cursor-pointer transition-colors hover:bg-blue-100 peer-checked:bg-blue-700 peer-checked:text-white peer-checked:ring peer-checked:ring-blue-300">
-            <i class="fa-solid fa-building mr-1"></i>{{ d['name'] }}
-          </label>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    <div>
-      <label class="block text-sm font-medium mb-2"><i class="fa-solid fa-id-card mr-1"></i>หมายเลขบัตรประชาชน</label>
-      <input type="text" name="id_card" placeholder="กรอกหมายเลขบัตรประชาชน" class="border border-gray-300 rounded px-3 py-2 w-full" required>
-    </div>
-    <button type="submit" class="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 flex items-center justify-center gap-1">
-      <i class="fa-solid fa-ticket"></i>
-      จองคิว
-    </button>
-  </form>
+  <p>เลือกเมนูด้านบนเพื่อจัดการข้อมูล</p>
 </div>
 {% endblock %}

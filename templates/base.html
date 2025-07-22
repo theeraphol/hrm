@@ -11,18 +11,17 @@
   <style>
     body { font-family: 'Noto Sans Thai', sans-serif; }
   </style>
-  <title>{{ title or 'Service Queue' }}</title>
+  <title>{{ title or 'HRM' }}</title>
 </head>
 <body class="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-900 via-blue-800 to-blue-700 text-gray-800">
   <div class="bg-white/70 backdrop-blur-md shadow-2xl rounded-xl p-8 w-full max-w-xl">
     <nav class="flex items-center justify-between mb-6 text-sm text-blue-900">
       <div class="flex gap-4 font-semibold">
-        <a href="{{ url_for('service_queue.index') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-house"></i>หน้าหลัก</a>
+        <a href="{{ url_for('hrm.index') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-house"></i>หน้าหลัก</a>
         {% if session.get('staff_user') %}
-        <a href="{{ url_for('service_queue.staff') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-list"></i>รายการคิว</a>
-        <a href="{{ url_for('service_queue.call_next') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-bullhorn"></i>เรียกคิว</a>
+        <a href="{{ url_for('hrm.attendance') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-clock"></i>บันทึกเวลา</a>
         {% else %}
-        <a href="{{ url_for('service_queue.login') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-right-to-bracket"></i>เข้าสู่ระบบ</a>
+        <a href="{{ url_for('hrm.login') }}" class="hover:text-blue-700 flex items-center gap-1"><i class="fa-solid fa-right-to-bracket"></i>เข้าสู่ระบบ</a>
         {% endif %}
       </div>
       <div class="flex items-center gap-2">
@@ -33,7 +32,7 @@
       </div>
     </nav>
     {% block body %}{% endblock %}
-    <footer class="mt-6 text-center text-xs text-gray-600">Service Queue {{ app_version }}</footer>
+    <footer class="mt-6 text-center text-xs text-gray-600">HRM {{ app_version }}</footer>
   </div>
 </body>
 </html>

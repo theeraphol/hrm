@@ -3,21 +3,24 @@ import os
 class Config:
     """การตั้งค่าสำหรับแอปพลิเคชัน"""
 
-    VERSION = "0.9.7"
-    # กำหนดค่า SECRET_KEY ผ่านตัวแปรสภาพแวดล้อมในระบบจริง
+    VERSION = "0.10.0"
 
-    SECRET_KEY = os.environ.get("SECRET_KEY", "BST-bangsithong-app-SECRET_KEY-024467684")
+    # คีย์ลับสำหรับ Flask ต้องกำหนดผ่านตัวแปรสภาพแวดล้อมเท่านั้น
+    SECRET_KEY = os.environ.get("SECRET_KEY")
 
     # Database
     DB_HOST = os.environ.get('MYSQL_HOST', 'localhost')
     DB_PORT = int(os.environ.get("MYSQL_PORT", 3306))
     DB_USER = os.environ.get('MYSQL_USER', 'root')
     # กำหนดรหัสผ่านฐานข้อมูลผ่านตัวแปรสภาพแวดล้อม
-    DB_PASSWORD = os.environ.get('MYSQL_PASSWORD', '987654321')
+    DB_PASSWORD = os.environ.get('MYSQL_PASSWORD')
     # ค่าดีฟอลต์ตรงกับฐานข้อมูลที่สร้างจาก schema.sql
-    DB_NAME = os.environ.get('MYSQL_DB', 'municipality_queue_db')
+    DB_NAME = os.environ.get('MYSQL_DB', 'hrm')
     # Optional path to mysqldump for backup service
     DBDUMP_PATH = os.environ.get('MYSQLDUMP_PATH')
+
+    # Server
+    SERVER_PORT = int(os.environ.get('PORT', 4997))
 
 
     # SSO Settings

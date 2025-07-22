@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-{% block body %}
-<h1 class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-bullhorn"></i><span>เรียกคิว</span></h1>
-<form method="post" class="mb-6 text-center space-x-2">
-  <button type="submit" name="action" value="next" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"><i class="fa-solid fa-forward mr-1"></i>เรียกคิวถัดไป</button>
-  <button type="submit" name="action" value="new" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"><i class="fa-solid fa-plus mr-1"></i>รับคิวใหม่</button>
-</form>
-<p class="text-center text-lg font-semibold text-blue-900"><i class='fa-solid fa-bell mr-1'></i>{{ message }}</p>
-{% endblock %}
