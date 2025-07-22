@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
   <style>
     body { font-family: 'Noto Sans Thai', sans-serif; }
   </style>
@@ -38,16 +38,6 @@
         <li>
           <a href="{{ url_for('hrm.projects') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
             <i class="fa-solid fa-folder-open text-indigo-500"></i> โครงการ
-          </a>
-        </li>
-        <li>
-          <a href="{{ url_for('hrm.backup') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
-            <i class="fa-solid fa-database text-teal-700"></i> สำรองข้อมูล
-          </a>
-        </li>
-        <li>
-          <a href="{{ url_for('hrm.about') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
-            <i class="fa-solid fa-circle-info text-gray-600"></i> คู่มือ
           </a>
         </li>
       </ul>
