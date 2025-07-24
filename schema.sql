@@ -67,3 +67,16 @@ CREATE TABLE behaviors (
     note TEXT,
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
+
+-- ประวัติพนักงาน
+CREATE TABLE employee_histories (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    national_id CHAR(13) NOT NULL,
+    full_name VARCHAR(100),
+    position VARCHAR(100),
+    department VARCHAR(100),
+    division VARCHAR(100),
+    start_date DATE,
+    note TEXT,
+    phone VARCHAR(20)
+);

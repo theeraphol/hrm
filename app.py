@@ -162,6 +162,26 @@ def staff():
         conn.close()
     return render_template('staff.html', staff_list=rows, title='ข้อมูลบุคลากร')
 
+# ----- Employee History -----
+
+@bp.route('/history')
+def history():
+    if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            query = (
+                'SELECT national_id, full_name, position, department, division, '
+                'start_date, note, phone FROM employee_histories ORDER BY id'
+            )
+            cur.execute(query)
+            rows = cur.fetchall()
+    finally:
+        conn.close()
+    return render_template('history.html', history_list=rows, title='ประวัติพนักงาน')
+
 # ----- Projects -----
 
 @bp.route('/projects')
