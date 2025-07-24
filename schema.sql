@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS hrm CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_
 USE hrm;
 
 -- ข้อมูลบุคลากร
-CREATE TABLE staff (
+CREATE TABLE IF NOT EXISTS staff (
     id INT AUTO_INCREMENT PRIMARY KEY,
     national_id CHAR(13) NOT NULL UNIQUE,
     full_name VARCHAR(100),
@@ -15,7 +15,7 @@ CREATE TABLE staff (
 );
 
 -- บันทึกเวลาเข้างาน/ออกงาน
-CREATE TABLE attendances (
+CREATE TABLE IF NOT EXISTS attendances (
     id INT AUTO_INCREMENT PRIMARY KEY,
     staff_id INT NOT NULL,
     checkin_time DATETIME,
@@ -25,7 +25,7 @@ CREATE TABLE attendances (
 );
 
 -- การลา
-CREATE TABLE leaves (
+CREATE TABLE IF NOT EXISTS leaves (
     id INT AUTO_INCREMENT PRIMARY KEY,
     staff_id INT NOT NULL,
     start_date DATE,
@@ -37,7 +37,7 @@ CREATE TABLE leaves (
 );
 
 -- อบรม/ดูงาน
-CREATE TABLE trainings (
+CREATE TABLE IF NOT EXISTS trainings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     staff_id INT NOT NULL,
     topic VARCHAR(200),
@@ -49,7 +49,7 @@ CREATE TABLE trainings (
 );
 
 -- กิจกรรมอื่น ๆ
-CREATE TABLE activities (
+CREATE TABLE IF NOT EXISTS activities (
     id INT AUTO_INCREMENT PRIMARY KEY,
     staff_id INT NOT NULL,
     activity_name VARCHAR(200),
@@ -59,7 +59,7 @@ CREATE TABLE activities (
 );
 
 -- พฤติกรรม/หมายเหตุ
-CREATE TABLE behaviors (
+CREATE TABLE IF NOT EXISTS behaviors (
     id INT AUTO_INCREMENT PRIMARY KEY,
     staff_id INT NOT NULL,
     behavior_date DATE,
@@ -69,7 +69,7 @@ CREATE TABLE behaviors (
 );
 
 -- ประวัติพนักงาน
-CREATE TABLE employee_histories (
+CREATE TABLE IF NOT EXISTS employee_histories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     national_id CHAR(13) NOT NULL,
     full_name VARCHAR(100),
