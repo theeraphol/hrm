@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% block body %}
 <h1 class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-user-clock"></i><span>ประวัติพนักงาน</span></h1>
-<table class="min-w-full bg-white border border-gray-300 text-sm">
+<div class="mb-4">
+  <a href="{{ url_for('hrm.history', add=1) }}" class="bg-green-700 text-white px-3 py-2 rounded hover:bg-green-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i>เพิ่มข้อมูล</a>
+</div>
+<table id="historyTable" class="min-w-full bg-white border border-gray-300 text-sm">
   <thead class="bg-blue-800 text-white">
     <tr>
+      <th class="py-2 px-3 text-center"></th>
       <th class="py-2 px-3 text-left">รหัสประชาชน</th>
       <th class="py-2 px-3 text-left">ชื่อ-สกุล</th>
       <th class="py-2 px-3 text-left">ตำแหน่ง</th>
@@ -12,12 +16,14 @@
       <th class="py-2 px-3 text-left">วันที่เริ่มงาน</th>
       <th class="py-2 px-3 text-left">หมายเหตุ</th>
       <th class="py-2 px-3 text-left">เบอร์ติดต่อ</th>
-      <th class="py-2 px-3"></th>
     </tr>
   </thead>
   <tbody>
     {% for h in history_list %}
     <tr class="odd:bg-gray-100">
+      <td class="py-2 px-3 text-center">
+        <a href="{{ url_for('hrm.history', edit_id=h.id) }}" class="text-blue-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></a>
+      </td>
       <td class="py-2 px-3">{{ h.national_id }}</td>
       <td class="py-2 px-3">{{ h.full_name or '' }}</td>
       <td class="py-2 px-3">{{ h.position or '' }}</td>
@@ -26,9 +32,6 @@
       <td class="py-2 px-3">{{ h.start_date or '' }}</td>
       <td class="py-2 px-3">{{ h.note or '' }}</td>
       <td class="py-2 px-3">{{ h.phone or '' }}</td>
-      <td class="py-2 px-3 text-center">
-        <a href="{{ url_for('hrm.history', edit_id=h.id) }}" class="text-blue-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></a>
-      </td>
     </tr>
     {% else %}
     <tr><td colspan="9" class="py-3 px-3 text-center text-gray-600">ไม่พบข้อมูล</td></tr>
@@ -38,12 +41,15 @@
 {% if message %}
 <p class="mt-4 text-center text-green-700"><i class="fa-solid fa-circle-info mr-1"></i>{{ message }}</p>
 {% endif %}
-<form method="post" class="mt-8 bg-white p-6 rounded shadow space-y-4">
-  <input type="hidden" name="id" value="{{ edit_record.id if edit_record else '' }}" />
-  <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
-    <i class="fa-solid fa-user-pen"></i>
-    {% if edit_record %}แก้ไขข้อมูล{% else %}เพิ่มประวัติพนักงาน{% endif %}
-  </h2>
+
+<div id="editModal" class="fixed inset-0 bg-black/30 hidden justify-start items-start overflow-auto">
+  <div id="modalBox" class="bg-white p-6 rounded shadow-lg w-full max-w-xl mx-auto mt-10 transform transition-all duration-300 -translate-y-10 opacity-0">
+  <form method="post" class="space-y-4">
+    <input type="hidden" name="id" value="{{ edit_record.id if edit_record else '' }}" />
+    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-user-pen"></i>
+      {% if edit_record %}แก้ไขข้อมูล{% else %}เพิ่มประวัติพนักงาน{% endif %}
+    </h2>
   <div>
     <label class="block text-sm mb-1">รหัสประชาชน</label>
     <input type="text" name="national_id" value="{{ edit_record.national_id if edit_record else '' }}" class="border border-gray-300 rounded px-3 py-2 w-full" required>
@@ -85,6 +91,31 @@
     {% if edit_record %}
     <a href="{{ url_for('hrm.history') }}" class="px-4 py-2 rounded border border-gray-300 text-gray-600 hover:bg-gray-50">ยกเลิก</a>
     {% endif %}
+    <button type="button" onclick="closeModal()" class="ml-auto px-4 py-2 text-gray-500 hover:underline">ปิด</button>
   </div>
 </form>
+  </div>
+</div>
+
+<script>
+function openModal(){
+  const m=document.getElementById('editModal');
+  const box=document.getElementById('modalBox');
+  m.classList.remove('hidden');
+  setTimeout(()=>{box.classList.remove('-translate-y-10','opacity-0');},10);
+}
+function closeModal(){
+  const m=document.getElementById('editModal');
+  const box=document.getElementById('modalBox');
+  box.classList.add('-translate-y-10','opacity-0');
+  setTimeout(()=>{m.classList.add('hidden');},300);
+}
+{% if open_modal %}window.addEventListener('load',openModal);{% endif %}
+$(document).ready(function(){
+  $('#historyTable').DataTable({
+    language:{url:'//cdn.datatables.net/plug-ins/1.13.6/i18n/th.json'}
+  });
+});
+</script>
+
 {% endblock %}
