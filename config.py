@@ -3,7 +3,7 @@ import os
 class Config:
     """การตั้งค่าสำหรับแอปพลิเคชัน"""
 
-    VERSION = "0.14.0"
+    VERSION = "0.15.1"
 
     # คีย์ลับสำหรับ Flask ต้องกำหนดผ่านตัวแปรสภาพแวดล้อมเท่านั้น
     SECRET_KEY = os.environ.get("BST-bangsithong-app-SECRET_KEY-024467684")
