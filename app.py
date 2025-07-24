@@ -171,6 +171,7 @@ def history():
 
     message = ''
     edit_record = None
+    open_modal = False
     conn = get_connection()
     try:
         if request.method == 'POST':
@@ -207,6 +208,9 @@ def history():
             with conn.cursor() as cur:
                 cur.execute('SELECT * FROM employee_histories WHERE id=%s', (edit_id,))
                 edit_record = cur.fetchone()
+            open_modal = True
+        elif request.args.get('add'):
+            open_modal = True
 
         with conn.cursor() as cur:
             cur.execute('SELECT * FROM employee_histories ORDER BY id')
@@ -218,6 +222,7 @@ def history():
         history_list=rows,
         edit_record=edit_record,
         message=message,
+        open_modal=open_modal,
         title='ประวัติพนักงาน'
     )
 
