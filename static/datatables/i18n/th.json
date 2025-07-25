@@ -1,0 +1,22 @@
+{
+  "decimal": "",
+  "emptyTable": "ไม่พบข้อมูล",
+  "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+  "infoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
+  "infoFiltered": "(กรองข้อมูลจากทั้งหมด _MAX_ รายการ)",
+  "lengthMenu": "แสดง _MENU_ รายการ",
+  "loadingRecords": "กำลังโหลด...",
+  "processing": "กำลังประมวลผล...",
+  "search": "ค้นหา:",
+  "zeroRecords": "ไม่พบข้อมูลที่ต้องการ",
+  "paginate": {
+    "first": "หน้าแรก",
+    "last": "หน้าสุดท้าย",
+    "next": "ถัดไป",
+    "previous": "ก่อนหน้า"
+  },
+  "aria": {
+    "sortAscending": ": เปิดใช้งานการเรียงจากน้อยไปมาก",
+    "sortDescending": ": เปิดใช้งานการเรียงจากมากไปน้อย"
+  }
+}
