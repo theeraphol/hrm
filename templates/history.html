@@ -113,7 +113,9 @@ function closeModal(){
 {% if open_modal %}window.addEventListener('load',openModal);{% endif %}
 $(document).ready(function(){
   $('#historyTable').DataTable({
-    language:{url:'//cdn.datatables.net/plug-ins/1.13.6/i18n/th.json'}
+    language:{url:'//cdn.datatables.net/plug-ins/2.0.3/i18n/th.json'},
+    pageLength:25,
+    lengthMenu:[[25,50,75,100,-1],[25,50,75,100,'ทั้งหมด']]
   });
 });
 </script>
