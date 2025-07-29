@@ -1,17 +1,69 @@
 {% extends 'base.html' %}
 {% block body %}
-<h1 class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-clock"></i><span>บันทึกเวลา</span></h1>
-<form method="post" class="space-y-4">
-  <div>
-    <label class="block text-sm font-medium mb-2"><i class="fa-solid fa-id-card mr-1"></i>หมายเลขบัตรประชาชน</label>
-    <input type="text" name="id_card" class="border border-gray-300 rounded px-3 py-2 w-full" required>
+<h1 class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2">
+  <i class="fa-solid fa-clock"></i>
+  <span>บันทึกเวลา</span>
+</h1>
+<form method="post" class="space-y-4" id="attForm">
+  <div class="flex items-center gap-2">
+    <label class="text-sm font-medium"><i class="fa-solid fa-calendar-days mr-1"></i>วันที่</label>
+    <input type="date" name="work_date" value="{{ selected_date }}" class="border border-gray-300 rounded px-3 py-1" />
+    <button type="submit" name="action" value="load" class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600 flex items-center gap-1"><i class="fa-solid fa-rotate"></i> แสดง</button>
   </div>
-  <div class="flex gap-2">
-    <button type="submit" name="action" value="checkin" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 flex items-center gap-1"><i class="fa-solid fa-right-to-bracket"></i>เข้างาน</button>
-    <button type="submit" name="action" value="checkout" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800 flex items-center gap-1"><i class="fa-solid fa-door-open"></i>ออกงาน</button>
+  <input type="hidden" name="action" value="save" id="saveAction"/>
+  <div>
+    <ul class="flex gap-2 border-b" id="deptTabs">
+      {% for dept in departments %}
+      <li>
+        <button type="button" data-tab="tab{{ loop.index0 }}" class="px-3 py-2 rounded-t border-b-2 {{ 'border-blue-600 font-semibold' if loop.first else 'border-transparent' }} hover:text-blue-600">
+          {{ dept or 'ไม่ระบุ' }}
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+    {% for dept in departments %}
+    <div id="tab{{ loop.index0 }}" class="pt-4 {% if not loop.first %}hidden{% endif %}">
+      <table class="min-w-full bg-white border border-gray-300 text-sm">
+        <thead class="bg-blue-800 text-white">
+          <tr>
+            <th class="py-2 px-3 text-left">ชื่อ-สกุล</th>
+            <th class="py-2 px-3 text-center">เข้างาน</th>
+            <th class="py-2 px-3 text-center">ออกงาน</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for s in staff_by_dept[dept] %}
+          <tr class="odd:bg-gray-100">
+            <td class="py-2 px-3">{{ s.full_name or '' }}</td>
+            <td class="py-2 px-3 text-center">
+              <input type="time" name="checkin_{{ s.id }}" value="{{ attendance.get(s.id).checkin_time.strftime('%H:%M') if attendance.get(s.id) and attendance.get(s.id).checkin_time }}" class="border border-gray-300 rounded px-2 py-1" />
+            </td>
+            <td class="py-2 px-3 text-center">
+              <input type="time" name="checkout_{{ s.id }}" value="{{ attendance.get(s.id).checkout_time.strftime('%H:%M') if attendance.get(s.id) and attendance.get(s.id).checkout_time }}" class="border border-gray-300 rounded px-2 py-1" />
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="pt-4">
+    <button type="submit" class="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800 flex items-center gap-1"><i class="fa-solid fa-floppy-disk"></i> บันทึกทั้งหมด</button>
   </div>
 </form>
 {% if message %}
-<p class="mt-4 text-center text-lg text-blue-900"><i class="fa-solid fa-circle-info mr-1"></i>{{ message }}</p>
+<p class="mt-4 text-center text-green-700"><i class="fa-solid fa-circle-info mr-1"></i>{{ message }}</p>
 {% endif %}
+<script>
+  document.querySelectorAll('#deptTabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#deptTabs button').forEach(b => b.classList.remove('border-blue-600','font-semibold'));
+      btn.classList.add('border-blue-600','font-semibold');
+      const tabId = btn.dataset.tab;
+      document.querySelectorAll('[id^="tab"]').forEach(div => div.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+    });
+  });
+</script>
 {% endblock %}
