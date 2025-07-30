@@ -1,10 +1,51 @@
 {% extends 'base.html' %}
 {% block body %}
-<div class="text-center space-y-6">
-  <h1 class="text-4xl font-bold text-blue-900 flex items-center justify-center gap-2">
-    <i class="fa-solid fa-users"></i>
-    <span>ระบบงานการเจ้าหน้าที่</span>
-  </h1>
-  <p>เลือกเมนูด้านซ้ายเพื่อจัดการข้อมูล</p>
+<h1 class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2">
+  <i class="fa-solid fa-table-columns"></i>
+  <span>แดชบอร์ด</span>
+</h1>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+  <div class="p-6 bg-white rounded shadow flex items-center gap-4">
+    <i class="fa-solid fa-users text-4xl text-blue-700"></i>
+    <div>
+      <div class="text-gray-500">บุคลากรทั้งหมด</div>
+      <div class="text-2xl font-semibold">{{ staff_count }}</div>
+    </div>
+  </div>
+  <div class="p-6 bg-white rounded shadow flex items-center gap-4">
+    <i class="fa-solid fa-clock text-4xl text-orange-600"></i>
+    <div>
+      <div class="text-gray-500">บันทึกเวลาวันนี้</div>
+      <div class="text-2xl font-semibold">{{ today_attendance }}</div>
+    </div>
+  </div>
+  <div class="p-6 bg-white rounded shadow flex items-center gap-4">
+    <i class="fa-solid fa-plane-departure text-4xl text-teal-600"></i>
+    <div>
+      <div class="text-gray-500">การลา</div>
+      <div class="text-2xl font-semibold">{{ leave_count }}</div>
+    </div>
+  </div>
+  <div class="p-6 bg-white rounded shadow flex items-center gap-4">
+    <i class="fa-solid fa-graduation-cap text-4xl text-indigo-600"></i>
+    <div>
+      <div class="text-gray-500">อบรม/ดูงาน</div>
+      <div class="text-2xl font-semibold">{{ training_count }}</div>
+    </div>
+  </div>
+  <div class="p-6 bg-white rounded shadow flex items-center gap-4">
+    <i class="fa-solid fa-people-group text-4xl text-emerald-600"></i>
+    <div>
+      <div class="text-gray-500">กิจกรรม</div>
+      <div class="text-2xl font-semibold">{{ activity_count }}</div>
+    </div>
+  </div>
+  <div class="p-6 bg-white rounded shadow flex items-center gap-4">
+    <i class="fa-solid fa-comments text-4xl text-purple-600"></i>
+    <div>
+      <div class="text-gray-500">บันทึกพฤติกรรม</div>
+      <div class="text-2xl font-semibold">{{ behavior_count }}</div>
+    </div>
+  </div>
 </div>
 {% endblock %}
