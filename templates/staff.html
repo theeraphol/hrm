@@ -8,6 +8,12 @@
       <th class="py-2 px-3 text-left">เลขบัตรประชาชน</th>
       <th class="py-2 px-3 text-left">ชื่อ-สกุล</th>
       <th class="py-2 px-3 text-left">ตำแหน่ง</th>
+      <th class="py-2 px-3 text-left">หน่วยงาน</th>
+      <th class="py-2 px-3 text-left">ฝ่าย</th>
+      <th class="py-2 px-3 text-left">เริ่มงาน</th>
+      <th class="py-2 px-3 text-left">อีเมล</th>
+      <th class="py-2 px-3 text-left">เบอร์ติดต่อ</th>
+      <th class="py-2 px-3 text-left">หมายเหตุ</th>
     </tr>
   </thead>
   <tbody>
@@ -17,9 +23,15 @@
       <td class="py-2 px-3">{{ s.national_id }}</td>
       <td class="py-2 px-3">{{ s.full_name or '' }}</td>
       <td class="py-2 px-3">{{ s.position or '' }}</td>
+      <td class="py-2 px-3">{{ s.department or '' }}</td>
+      <td class="py-2 px-3">{{ s.division or '' }}</td>
+      <td class="py-2 px-3">{{ s.start_date or '' }}</td>
+      <td class="py-2 px-3">{{ s.email or '' }}</td>
+      <td class="py-2 px-3">{{ s.phone or '' }}</td>
+      <td class="py-2 px-3">{{ s.note or '' }}</td>
     </tr>
     {% else %}
-    <tr><td colspan="4" class="py-3 px-3 text-center text-gray-600">ไม่พบข้อมูล</td></tr>
+    <tr><td colspan="10" class="py-3 px-3 text-center text-gray-600">ไม่พบข้อมูล</td></tr>
     {% endfor %}
   </tbody>
 </table>

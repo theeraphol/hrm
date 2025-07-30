@@ -197,7 +197,7 @@ def staff():
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            cur.execute('SELECT id, national_id, full_name, position FROM staff ORDER BY id')
+            cur.execute('SELECT id, national_id, full_name, position, department, division, start_date, email, phone, note FROM staff ORDER BY id')
             rows = cur.fetchall()
     finally:
         conn.close()
@@ -224,6 +224,7 @@ def history():
                 form.get('department'),
                 form.get('division'),
                 form.get('start_date'),
+                form.get('email'),
                 form.get('note'),
                 form.get('phone'),
             )
@@ -231,14 +232,14 @@ def history():
                 if form.get('id'):
                     cur.execute(
                         'UPDATE employee_histories SET national_id=%s, full_name=%s, position=%s, '
-                        'department=%s, division=%s, start_date=%s, note=%s, phone=%s WHERE id=%s',
+                        'department=%s, division=%s, start_date=%s, email=%s, note=%s, phone=%s WHERE id=%s',
                         data + (form.get('id'),)
                     )
                     message = 'แก้ไขข้อมูลเรียบร้อยแล้ว'
                 else:
                     cur.execute(
                         'INSERT INTO employee_histories (national_id, full_name, position, department, '
-                        'division, start_date, note, phone) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',
+                        'division, start_date, email, note, phone) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)',
                         data
                     )
                     message = 'เพิ่มข้อมูลเรียบร้อยแล้ว'
