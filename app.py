@@ -14,8 +14,12 @@ app.secret_key = Config.SECRET_KEY or 'dev'
 bp = Blueprint('hrm', __name__, url_prefix='/hrm')
 
 @app.context_processor
-def inject_version():
-    return {'app_version': VERSION}
+def inject_globals():
+    return {
+        'app_version': VERSION,
+        'default_checkin': Config.DEFAULT_CHECKIN_TIME,
+        'default_checkout': Config.DEFAULT_CHECKOUT_TIME
+    }
 
 # ----- SSO -----
 oauth = OAuth(app)
