@@ -9,7 +9,9 @@ CREATE TABLE IF NOT EXISTS staff (
     full_name VARCHAR(100),
     position VARCHAR(100),
     department VARCHAR(100),
+    division VARCHAR(100),
     start_date DATE,
+    note TEXT,
     email VARCHAR(100),
     phone VARCHAR(20)
 );
@@ -77,6 +79,7 @@ CREATE TABLE IF NOT EXISTS employee_histories (
     department VARCHAR(100),
     division VARCHAR(100),
     start_date DATE,
+    email VARCHAR(100),
     note TEXT,
     phone VARCHAR(20)
 );

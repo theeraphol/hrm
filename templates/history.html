@@ -14,6 +14,7 @@
       <th class="py-2 px-3 text-left">หน่วยงาน</th>
       <th class="py-2 px-3 text-left">ฝ่าย</th>
       <th class="py-2 px-3 text-left">วันที่เริ่มงาน</th>
+      <th class="py-2 px-3 text-left">อีเมล</th>
       <th class="py-2 px-3 text-left">หมายเหตุ</th>
       <th class="py-2 px-3 text-left">เบอร์ติดต่อ</th>
     </tr>
@@ -30,11 +31,12 @@
       <td class="py-2 px-3">{{ h.department or '' }}</td>
       <td class="py-2 px-3">{{ h.division or '' }}</td>
       <td class="py-2 px-3">{{ h.start_date or '' }}</td>
+      <td class="py-2 px-3">{{ h.email or '' }}</td>
       <td class="py-2 px-3">{{ h.note or '' }}</td>
       <td class="py-2 px-3">{{ h.phone or '' }}</td>
     </tr>
     {% else %}
-    <tr><td colspan="9" class="py-3 px-3 text-center text-gray-600">ไม่พบข้อมูล</td></tr>
+    <tr><td colspan="10" class="py-3 px-3 text-center text-gray-600">ไม่พบข้อมูล</td></tr>
     {% endfor %}
   </tbody>
 </table>
@@ -77,6 +79,10 @@
       <label class="block text-sm mb-1">วันที่เริ่มงาน</label>
       <input type="date" name="start_date" value="{{ edit_record.start_date if edit_record else '' }}" class="border border-gray-300 rounded px-3 py-2 w-full">
     </div>
+  </div>
+  <div>
+    <label class="block text-sm mb-1">อีเมล</label>
+    <input type="email" name="email" value="{{ edit_record.email if edit_record else '' }}" class="border border-gray-300 rounded px-3 py-2 w-full">
   </div>
   <div>
     <label class="block text-sm mb-1">หมายเหตุ</label>
