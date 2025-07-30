@@ -36,10 +36,10 @@
           <tr class="odd:bg-gray-100">
             <td class="py-2 px-3">{{ s.full_name or '' }}</td>
             <td class="py-2 px-3 text-center">
-              <input type="time" name="checkin_{{ s.id }}" value="{{ attendance.get(s.id).checkin_time.strftime('%H:%M') if attendance.get(s.id) and attendance.get(s.id).checkin_time }}" class="border border-gray-300 rounded px-2 py-1" />
+              <input type="time" name="checkin_{{ s.id }}" value="{{ (attendance.get(s.id).checkin_time.strftime('%H:%M') if attendance.get(s.id) and attendance.get(s.id).checkin_time else default_checkin) }}" class="border border-gray-300 rounded px-2 py-1" />
             </td>
             <td class="py-2 px-3 text-center">
-              <input type="time" name="checkout_{{ s.id }}" value="{{ attendance.get(s.id).checkout_time.strftime('%H:%M') if attendance.get(s.id) and attendance.get(s.id).checkout_time }}" class="border border-gray-300 rounded px-2 py-1" />
+              <input type="time" name="checkout_{{ s.id }}" value="{{ (attendance.get(s.id).checkout_time.strftime('%H:%M') if attendance.get(s.id) and attendance.get(s.id).checkout_time else default_checkout) }}" class="border border-gray-300 rounded px-2 py-1" />
             </td>
           </tr>
         {% endfor %}

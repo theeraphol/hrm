@@ -3,7 +3,11 @@ import os
 class Config:
     """การตั้งค่าสำหรับแอปพลิเคชัน"""
 
-    VERSION = "0.21.0"
+    VERSION = "0.22.0"
+
+    # ตั้งเวลาเข้างานและออกงานเริ่มต้น
+    DEFAULT_CHECKIN_TIME = os.environ.get('DEFAULT_CHECKIN_TIME', '08:30')
+    DEFAULT_CHECKOUT_TIME = os.environ.get('DEFAULT_CHECKOUT_TIME', '16:30')
 
     # คีย์ลับสำหรับ Flask ต้องกำหนดผ่านตัวแปรสภาพแวดล้อมเท่านั้น
     SECRET_KEY = os.environ.get("BST-bangsithong-app-SECRET_KEY-024467684")
