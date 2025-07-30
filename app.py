@@ -225,6 +225,57 @@ def attendance():
                            message=message,
                            title='บันทึกเวลา')
 
+# ----- Attendance Stats -----
+
+@bp.route('/attendance-stats')
+def attendance_stats():
+    if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT DATE_FORMAT(checkin_time,'%Y-%m') AS m, COUNT(*) AS c "
+                        "FROM attendances GROUP BY m ORDER BY m")
+            rows = cur.fetchall()
+    finally:
+        conn.close()
+
+    labels = [r['m'] for r in rows]
+    counts = [r['c'] for r in rows]
+    return render_template('attendance_stats.html',
+                           labels=json.dumps(labels),
+                           counts=json.dumps(counts),
+                           title='สถิติการเข้างาน')
+
+
+@bp.route('/attendance-stats/data')
+def attendance_stats_data():
+    if not sso_authenticated():
+        return {}, 403
+
+    month = request.args.get('month')
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            if month:
+                cur.execute("SELECT DATE(checkin_time) AS d, COUNT(*) AS c "
+                            "FROM attendances WHERE DATE_FORMAT(checkin_time,'%Y-%m')=%s "
+                            "GROUP BY d ORDER BY d", (month,))
+                rows = cur.fetchall()
+                labels = [r['d'].strftime('%Y-%m-%d') for r in rows]
+                counts = [r['c'] for r in rows]
+            else:
+                cur.execute("SELECT DATE_FORMAT(checkin_time,'%Y-%m') AS m, COUNT(*) AS c "
+                            "FROM attendances GROUP BY m ORDER BY m")
+                rows = cur.fetchall()
+                labels = [r['m'] for r in rows]
+                counts = [r['c'] for r in rows]
+    finally:
+        conn.close()
+
+    return {'labels': labels, 'counts': counts}
+
 # ----- Staff Management -----
 
 @bp.route('/staff')
