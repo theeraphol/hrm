@@ -225,6 +225,64 @@ def attendance():
                            message=message,
                            title='บันทึกเวลา')
 
+# ----- Attendance Stats -----
+
+@bp.route('/attendance-stats')
+def attendance_stats():
+    if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT YEAR(checkin_time) AS y, COUNT(*) AS c "
+                "FROM attendances GROUP BY y ORDER BY y"
+            )
+            rows = cur.fetchall()
+    finally:
+        conn.close()
+
+    labels = [str(r['y']) for r in rows]
+    counts = [r['c'] for r in rows]
+    return render_template('attendance_stats.html',
+                           labels=json.dumps(labels),
+                           counts=json.dumps(counts),
+                           title='สถิติการเข้างาน')
+
+
+@bp.route('/attendance-stats/data')
+def attendance_stats_data():
+    if not sso_authenticated():
+        return {}, 403
+
+    year = request.args.get('year')
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            if year:
+                cur.execute(
+                    "SELECT DATE_FORMAT(checkin_time,'%Y-%m') AS m, COUNT(*) AS c "
+                    "FROM attendances WHERE YEAR(checkin_time)=%s "
+                    "GROUP BY m ORDER BY m",
+                    (year,),
+                )
+                rows = cur.fetchall()
+                labels = [r['m'] for r in rows]
+                counts = [r['c'] for r in rows]
+            else:
+                cur.execute(
+                    "SELECT YEAR(checkin_time) AS y, COUNT(*) AS c "
+                    "FROM attendances GROUP BY y ORDER BY y"
+                )
+                rows = cur.fetchall()
+                labels = [str(r['y']) for r in rows]
+                counts = [r['c'] for r in rows]
+    finally:
+        conn.close()
+
+    return {'labels': labels, 'counts': counts}
+
 # ----- Staff Management -----
 
 @bp.route('/staff')

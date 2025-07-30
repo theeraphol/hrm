@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="text-2xl font-bold mb-6 flex items-center gap-2"><i class="fa-solid fa-chart-column text-blue-600"></i><span>สถิติการเข้างาน</span></h1>
+<div class="bg-white p-4 rounded shadow">
+  <canvas id="attChart" height="120"></canvas>
+  <div class="text-right mt-2">
+    <button id="btnBack" class="hidden text-sm text-blue-600 hover:underline">แสดงรายปี</button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const yearlyData = {
+  labels: {{ labels|safe }},
+  counts: {{ counts|safe }}
+};
+let isYearly = true;
+const ctx = document.getElementById('attChart');
+let chart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: yearlyData.labels,
+    datasets: [{
+      label: 'จำนวนการลงเวลา',
+      data: yearlyData.counts,
+      backgroundColor: '#2563eb'
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { title: { display: true, text: 'ปี' } },
+      y: { beginAtZero: true }
+    },
+    onClick: (e, els) => {
+      if (isYearly && els.length) {
+        const year = chart.data.labels[els[0].index];
+        loadMonthly(year);
+      }
+    }
+  }
+});
+function loadMonthly(year){
+  fetch('{{ url_for('hrm.attendance_stats_data') }}?year=' + year)
+    .then(r => r.json())
+    .then(data => {
+      chart.data.labels = data.labels;
+      chart.data.datasets[0].data = data.counts;
+      chart.options.scales.x.title.text = 'เดือนของปี ' + year;
+      chart.update();
+      isYearly = false;
+      document.getElementById('btnBack').classList.remove('hidden');
+    });
+}
+document.getElementById('btnBack').addEventListener('click', () => {
+  chart.data.labels = yearlyData.labels;
+  chart.data.datasets[0].data = yearlyData.counts;
+  chart.options.scales.x.title.text = 'ปี';
+  chart.update();
+  isYearly = true;
+  document.getElementById('btnBack').classList.add('hidden');
+});
+</script>
+{% endblock %}
