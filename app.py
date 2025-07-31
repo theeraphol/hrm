@@ -364,10 +364,14 @@ def history():
         title='ประวัติพนักงาน'
     )
 
-# ----- Trainings -----
 
 @bp.route('/trainings', methods=['GET', 'POST'])
 def trainings():
+   if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+
+@bp.route('/leaves', methods=['GET', 'POST'])
+def leaves():
     if not sso_authenticated():
         return redirect(url_for('hrm.login'))
 
