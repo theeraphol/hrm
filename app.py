@@ -364,6 +364,114 @@ def history():
         title='ประวัติพนักงาน'
     )
 
+# ----- Activities -----
+
+@bp.route('/activities', methods=['GET', 'POST'])
+def activities():
+   if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+
+@bp.route('/trainings', methods=['GET', 'POST'])
+def trainings():
+   if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+
+@bp.route('/leaves', methods=['GET', 'POST'])
+def leaves():
+    if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
+
+    message = ''
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            if request.method == 'POST':
+                cur.execute(
+                    'INSERT INTO activities (staff_id, activity_name, activity_date, description) '
+                    'VALUES (%s,%s,%s,%s)',
+                    (
+                        request.form.get('staff_id'),
+                        request.form.get('activity_name'),
+                        request.form.get('activity_date'),
+                        request.form.get('description'),
+                    ),
+                )
+                conn.commit()
+                message = 'บันทึกกิจกรรมเรียบร้อยแล้ว'
+
+            cur.execute(
+                'SELECT a.id, s.full_name, a.activity_name, a.activity_date, a.description '
+                'FROM activities a JOIN staff s ON a.staff_id=s.id '
+                'ORDER BY a.activity_date DESC, a.id DESC'
+            )
+            rows = cur.fetchall()
+            cur.execute('SELECT id, full_name FROM staff ORDER BY full_name')
+            staff_list = cur.fetchall()
+
+    edit_record = None
+    open_modal = False
+    conn = get_connection()
+    try:
+        if request.method == 'POST':
+            form = request.form
+            data = (
+                form.get('staff_id'),
+                form.get('topic'),
+                form.get('place'),
+                form.get('start_date'),
+                form.get('end_date'),
+                form.get('description'),
+            )
+            with conn.cursor() as cur:
+                if form.get('id'):
+                    cur.execute(
+                        'UPDATE trainings SET staff_id=%s, topic=%s, place=%s, start_date=%s, end_date=%s, description=%s WHERE id=%s',
+                        data + (form.get('id'),),
+                    )
+                    message = 'แก้ไขข้อมูลเรียบร้อยแล้ว'
+                else:
+                    cur.execute(
+                        'INSERT INTO trainings (staff_id, topic, place, start_date, end_date, description) VALUES (%s,%s,%s,%s,%s,%s)',
+                        data,
+                    )
+                    message = 'เพิ่มข้อมูลเรียบร้อยแล้ว'
+                conn.commit()
+
+        edit_id = request.args.get('edit_id')
+        with conn.cursor() as cur:
+            cur.execute('SELECT id, full_name FROM staff ORDER BY full_name')
+            staff_list = cur.fetchall()
+
+        if edit_id:
+            with conn.cursor() as cur:
+                cur.execute('SELECT * FROM trainings WHERE id=%s', (edit_id,))
+                edit_record = cur.fetchone()
+            open_modal = True
+        elif request.args.get('add'):
+            open_modal = True
+
+        with conn.cursor() as cur:
+            cur.execute('SELECT t.*, s.full_name FROM trainings t JOIN staff s ON t.staff_id=s.id ORDER BY t.id')
+            rows = cur.fetchall()
+
+    finally:
+        conn.close()
+
+    return render_template(
+        'activities.html',
+        activities=rows,
+        staff_list=staff_list,
+        message=message,
+        title='กิจกรรม',
+        'trainings.html',
+        training_list=rows,
+        staff_list=staff_list,
+        edit_record=edit_record,
+        message=message,
+        open_modal=open_modal,
+        title='อบรม/ดูงาน',
+    )
+
 # ----- Projects -----
 
 @bp.route('/projects')
