@@ -21,8 +21,8 @@
     <div class="h-16 flex items-center px-6 font-bold text-blue-600 border-b">
       <i class="fa-solid fa-users mr-2"></i> HRM
     </div>
-    <nav class="flex-1 overflow-y-auto px-4 py-6 text-sm">
-      <ul class="space-y-2">
+    <nav class="flex-1 overflow-y-auto px-4 py-4 text-sm">
+      <ul class="space-y-1">
         <li>
           <a href="{{ url_for('hrm.index') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
             <i class="fa-solid fa-table-columns text-blue-500"></i> Dashboard
@@ -49,14 +49,24 @@
           </a>
         </li>
         <li>
-          <a href="{{ url_for('hrm.attendance') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
-            <i class="fa-solid fa-clock text-orange-500"></i> บันทึกเวลา
-          </a>
-        </li>
-        <li>
-          <a href="{{ url_for('hrm.attendance_stats') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
-            <i class="fa-solid fa-chart-column text-blue-600"></i> สถิติการเข้างาน
-          </a>
+          <button type="button" data-target="attendance-menu" class="w-full flex justify-between items-center p-2 rounded-lg hover:bg-blue-50">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid fa-clock text-orange-500"></i> การบันทึกเวลา
+            </span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+          </button>
+          <ul id="attendance-menu" class="space-y-1 ml-6 mt-1 hidden">
+            <li>
+              <a href="{{ url_for('hrm.attendance') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
+                <i class="fa-regular fa-circle-check text-orange-500"></i> บันทึกเวลา
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('hrm.attendance_stats') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
+                <i class="fa-solid fa-chart-column text-blue-600"></i> สถิติการเข้างาน
+              </a>
+            </li>
+          </ul>
         </li>
         <li>
           <a href="{{ url_for('hrm.activities') }}" class="flex items-center gap-2 p-2 rounded-lg hover:bg-blue-50">
@@ -112,6 +122,13 @@
     const sidebar = document.getElementById('sidebar');
     menuBtn?.addEventListener('click', () => {
       sidebar.classList.toggle('-translate-x-full');
+    });
+    document.querySelectorAll('button[data-target]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById(btn.dataset.target);
+        target?.classList.toggle('hidden');
+        btn.querySelector('i.fa-chevron-down')?.classList.toggle('rotate-180');
+      });
     });
   </script>
 </body>
