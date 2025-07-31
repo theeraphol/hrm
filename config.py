@@ -3,7 +3,7 @@ import os
 class Config:
     """การตั้งค่าสำหรับแอปพลิเคชัน"""
 
-    VERSION = "0.28.0"
+    VERSION = "0.29.0"
 
     # ตั้งเวลาเข้างานและออกงานเริ่มต้น
     DEFAULT_CHECKIN_TIME = os.environ.get('DEFAULT_CHECKIN_TIME', '08:30')
