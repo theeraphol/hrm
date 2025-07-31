@@ -49,11 +49,20 @@
         {% if edit_record %}แก้ไขข้อมูล{% else %}เพิ่มข้อมูลอบรม{% endif %}
       </h2>
       <div>
+        <label class="block text-sm mb-1">หน่วยงาน</label>
+        <select id="deptSelect" class="border border-gray-300 rounded px-3 py-2 w-full">
+          <option value="">-เลือกหน่วยงาน-</option>
+          {% for d in departments %}
+          <option value="{{ d }}">{{ d or 'ไม่ระบุ' }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
         <label class="block text-sm mb-1">พนักงาน</label>
-        <select name="staff_id" class="border border-gray-300 rounded px-3 py-2 w-full" required>
+        <select name="staff_id" id="staffSelect" class="border border-gray-300 rounded px-3 py-2 w-full" required>
           <option value="">-เลือกพนักงาน-</option>
           {% for s in staff_list %}
-          <option value="{{ s.id }}" {% if edit_record and s.id==edit_record.staff_id %}selected{% endif %}>{{ s.full_name }}</option>
+          <option value="{{ s.id }}" data-dept="{{ s.department }}" {% if edit_record and s.id==edit_record.staff_id %}selected{% endif %}>{{ s.full_name }}</option>
           {% endfor %}
         </select>
       </div>
@@ -110,6 +119,26 @@ $(document).ready(function(){
     pageLength:25,
     lengthMenu:[[25,50,75,100,-1],[25,50,75,100,'ทั้งหมด']]
   });
+});
+
+const deptSelect=document.getElementById('deptSelect');
+const staffSelect=document.getElementById('staffSelect');
+function filterStaff(){
+  const dept=deptSelect.value;
+  Array.from(staffSelect.options).forEach(opt=>{
+    if(!opt.value) return;
+    opt.hidden = dept && opt.dataset.dept!==dept;
+  });
+  if(staffSelect.selectedOptions.length && staffSelect.selectedOptions[0].hidden){
+    staffSelect.selectedIndex=0;
+  }
+}
+deptSelect?.addEventListener('change',filterStaff);
+window.addEventListener('load',()=>{
+  {% if edit_record %}
+  deptSelect.value = '{{ edit_record.department }}';
+  {% endif %}
+  filterStaff();
 });
 </script>
 {% endblock %}

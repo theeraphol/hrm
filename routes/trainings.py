@@ -10,6 +10,8 @@ def trainings():
     message = ''
     edit_record = None
     open_modal = False
+    departments = []
+    staff_list = []
     conn = get_connection()
     try:
         if request.method == 'POST':
@@ -37,14 +39,18 @@ def trainings():
                     message = 'เพิ่มข้อมูลเรียบร้อยแล้ว'
                 conn.commit()
 
-        edit_id = request.args.get('edit_id')
         with conn.cursor() as cur:
-            cur.execute('SELECT id, full_name FROM staff ORDER BY full_name')
+            cur.execute('SELECT DISTINCT department FROM staff ORDER BY department')
+            departments = [row['department'] or '' for row in cur.fetchall()]
+
+            cur.execute('SELECT id, full_name, department FROM staff ORDER BY department, full_name')
             staff_list = cur.fetchall()
+
+        edit_id = request.args.get('edit_id')
 
         if edit_id:
             with conn.cursor() as cur:
-                cur.execute('SELECT * FROM trainings WHERE id=%s', (edit_id,))
+                cur.execute('SELECT t.*, s.department FROM trainings t JOIN staff s ON t.staff_id=s.id WHERE t.id=%s', (edit_id,))
                 edit_record = cur.fetchone()
             open_modal = True
         elif request.args.get('add'):
@@ -60,6 +66,7 @@ def trainings():
         'trainings.html',
         training_list=rows,
         staff_list=staff_list,
+        departments=departments,
         edit_record=edit_record,
         message=message,
         open_modal=open_modal,
