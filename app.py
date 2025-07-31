@@ -364,7 +364,11 @@ def history():
         title='ประวัติพนักงาน'
     )
 
-# ----- Leaves -----
+
+@bp.route('/trainings', methods=['GET', 'POST'])
+def trainings():
+   if not sso_authenticated():
+        return redirect(url_for('hrm.login'))
 
 @bp.route('/leaves', methods=['GET', 'POST'])
 def leaves():
@@ -380,58 +384,54 @@ def leaves():
             form = request.form
             data = (
                 form.get('staff_id'),
+                form.get('topic'),
+                form.get('place'),
                 form.get('start_date'),
                 form.get('end_date'),
-                form.get('leave_type'),
-                form.get('reason'),
-                form.get('status'),
+                form.get('description'),
             )
             with conn.cursor() as cur:
                 if form.get('id'):
                     cur.execute(
-                        'UPDATE leaves SET staff_id=%s, start_date=%s, end_date=%s, '
-                        'leave_type=%s, reason=%s, status=%s WHERE id=%s',
-                        data + (form.get('id'),)
+                        'UPDATE trainings SET staff_id=%s, topic=%s, place=%s, start_date=%s, end_date=%s, description=%s WHERE id=%s',
+                        data + (form.get('id'),),
                     )
                     message = 'แก้ไขข้อมูลเรียบร้อยแล้ว'
                 else:
                     cur.execute(
-                        'INSERT INTO leaves (staff_id, start_date, end_date, leave_type, reason, status) '
-                        'VALUES (%s,%s,%s,%s,%s,%s)',
-                        data
+                        'INSERT INTO trainings (staff_id, topic, place, start_date, end_date, description) VALUES (%s,%s,%s,%s,%s,%s)',
+                        data,
                     )
                     message = 'เพิ่มข้อมูลเรียบร้อยแล้ว'
                 conn.commit()
 
         edit_id = request.args.get('edit_id')
+        with conn.cursor() as cur:
+            cur.execute('SELECT id, full_name FROM staff ORDER BY full_name')
+            staff_list = cur.fetchall()
+
         if edit_id:
             with conn.cursor() as cur:
-                cur.execute('SELECT * FROM leaves WHERE id=%s', (edit_id,))
+                cur.execute('SELECT * FROM trainings WHERE id=%s', (edit_id,))
                 edit_record = cur.fetchone()
             open_modal = True
         elif request.args.get('add'):
             open_modal = True
 
         with conn.cursor() as cur:
-            cur.execute(
-                'SELECT l.*, s.full_name FROM leaves l JOIN staff s ON l.staff_id=s.id '
-                'ORDER BY l.start_date DESC'
-            )
+            cur.execute('SELECT t.*, s.full_name FROM trainings t JOIN staff s ON t.staff_id=s.id ORDER BY t.id')
             rows = cur.fetchall()
-
-            cur.execute('SELECT id, full_name FROM staff ORDER BY full_name')
-            staff_rows = cur.fetchall()
     finally:
         conn.close()
 
     return render_template(
-        'leaves.html',
-        leave_list=rows,
-        staff_list=staff_rows,
+        'trainings.html',
+        training_list=rows,
+        staff_list=staff_list,
         edit_record=edit_record,
         message=message,
         open_modal=open_modal,
-        title='การลา',
+        title='อบรม/ดูงาน',
     )
 
 # ----- Projects -----
