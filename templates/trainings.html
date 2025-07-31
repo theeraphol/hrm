@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2">
+  <i class="fa-solid fa-graduation-cap"></i><span>อบรม/ดูงาน</span>
+</h1>
+<div class="mb-4">
+  <a href="{{ url_for('hrm.trainings', add=1) }}" class="bg-green-700 text-white px-3 py-2 rounded hover:bg-green-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i>เพิ่มข้อมูล</a>
+</div>
+<table id="trainTable" class="min-w-full bg-white border border-gray-300 text-sm">
+  <thead class="bg-blue-800 text-white">
+    <tr>
+      <th class="py-2 px-3 text-center"></th>
+      <th class="py-2 px-3 text-left">ชื่อพนักงาน</th>
+      <th class="py-2 px-3 text-left">หัวข้ออบรม</th>
+      <th class="py-2 px-3 text-left">สถานที่</th>
+      <th class="py-2 px-3 text-left">วันที่เริ่ม</th>
+      <th class="py-2 px-3 text-left">วันที่สิ้นสุด</th>
+      <th class="py-2 px-3 text-left">รายละเอียด</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for tr in training_list %}
+    <tr class="odd:bg-gray-100">
+      <td class="py-2 px-3 text-center">
+        <a href="{{ url_for('hrm.trainings', edit_id=tr.id) }}" class="text-blue-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></a>
+      </td>
+      <td class="py-2 px-3">{{ tr.full_name or '' }}</td>
+      <td class="py-2 px-3">{{ tr.topic or '' }}</td>
+      <td class="py-2 px-3">{{ tr.place or '' }}</td>
+      <td class="py-2 px-3">{{ tr.start_date or '' }}</td>
+      <td class="py-2 px-3">{{ tr.end_date or '' }}</td>
+      <td class="py-2 px-3">{{ tr.description or '' }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="py-3 px-3 text-center text-gray-600">ไม่พบข้อมูล</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% if message %}
+<p class="mt-4 text-center text-green-700"><i class="fa-solid fa-circle-info mr-1"></i>{{ message }}</p>
+{% endif %}
+
+<div id="editModal" class="fixed inset-0 bg-black/30 hidden justify-start items-start overflow-auto">
+  <div id="modalBox" class="bg-white p-6 rounded shadow-lg w-full max-w-xl mx-auto mt-10 transform transition-all duration-300 -translate-y-10 opacity-0">
+    <form method="post" class="space-y-4">
+      <input type="hidden" name="id" value="{{ edit_record.id if edit_record else '' }}" />
+      <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-graduation-cap"></i>
+        {% if edit_record %}แก้ไขข้อมูล{% else %}เพิ่มข้อมูลอบรม{% endif %}
+      </h2>
+      <div>
+        <label class="block text-sm mb-1">พนักงาน</label>
+        <select name="staff_id" class="border border-gray-300 rounded px-3 py-2 w-full" required>
+          <option value="">-เลือกพนักงาน-</option>
+          {% for s in staff_list %}
+          <option value="{{ s.id }}" {% if edit_record and s.id==edit_record.staff_id %}selected{% endif %}>{{ s.full_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">หัวข้ออบรม</label>
+        <input type="text" name="topic" value="{{ edit_record.topic if edit_record else '' }}" class="border border-gray-300 rounded px-3 py-2 w-full" required>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">สถานที่</label>
+        <input type="text" name="place" value="{{ edit_record.place if edit_record else '' }}" class="border border-gray-300 rounded px-3 py-2 w-full">
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm mb-1">วันที่เริ่ม</label>
+          <input type="date" name="start_date" value="{{ edit_record.start_date if edit_record else '' }}" class="border border-gray-300 rounded px-3 py-2 w-full">
+        </div>
+        <div>
+          <label class="block text-sm mb-1">วันที่สิ้นสุด</label>
+          <input type="date" name="end_date" value="{{ edit_record.end_date if edit_record else '' }}" class="border border-gray-300 rounded px-3 py-2 w-full">
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">รายละเอียด</label>
+        <textarea name="description" class="border border-gray-300 rounded px-3 py-2 w-full">{{ edit_record.description if edit_record else '' }}</textarea>
+      </div>
+      <div class="flex gap-2">
+        <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 flex items-center gap-1"><i class="fa-solid fa-floppy-disk"></i>บันทึก</button>
+        {% if edit_record %}
+        <a href="{{ url_for('hrm.trainings') }}" class="px-4 py-2 rounded border border-gray-300 text-gray-600 hover:bg-gray-50">ยกเลิก</a>
+        {% endif %}
+        <button type="button" onclick="closeModal()" class="ml-auto px-4 py-2 text-gray-500 hover:underline">ปิด</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openModal(){
+  const m=document.getElementById('editModal');
+  const box=document.getElementById('modalBox');
+  m.classList.remove('hidden');
+  setTimeout(()=>{box.classList.remove('-translate-y-10','opacity-0');},10);
+}
+function closeModal(){
+  const m=document.getElementById('editModal');
+  const box=document.getElementById('modalBox');
+  box.classList.add('-translate-y-10','opacity-0');
+  setTimeout(()=>{m.classList.add('hidden');},300);
+}
+{% if open_modal %}window.addEventListener('load',openModal);{% endif %}
+$(document).ready(function(){
+  $('#trainTable').DataTable({
+    language:{url:'{{ url_for('static', filename='datatables/i18n/th.json') }}'},
+    pageLength:25,
+    lengthMenu:[[25,50,75,100,-1],[25,50,75,100,'ทั้งหมด']]
+  });
+});
+</script>
+{% endblock %}
