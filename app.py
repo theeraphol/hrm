@@ -364,7 +364,6 @@ def history():
         title='ประวัติพนักงาน'
     )
 
-
 # ----- Activities -----
 
 @bp.route('/activities', methods=['GET', 'POST'])
@@ -408,6 +407,7 @@ def leaves():
             rows = cur.fetchall()
             cur.execute('SELECT id, full_name FROM staff ORDER BY full_name')
             staff_list = cur.fetchall()
+
     edit_record = None
     open_modal = False
     conn = get_connection()
