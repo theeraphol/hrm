@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2">
+  <i class="fa-solid fa-plane-departure"></i>
+  <span>การลา</span>
+</h1>
+<div class="mb-4">
+  <a href="{{ url_for('hrm.leaves', add=1) }}" class="bg-green-700 text-white px-3 py-2 rounded hover:bg-green-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i>เพิ่มข้อมูล</a>
+</div>
+<table id="leaveTable" class="min-w-full bg-white border border-gray-300 text-sm">
+  <thead class="bg-blue-800 text-white">
+    <tr>
+      <th class="py-2 px-3 text-center"></th>
+      <th class="py-2 px-3 text-left">พนักงาน</th>
+      <th class="py-2 px-3 text-left">จากวันที่</th>
+      <th class="py-2 px-3 text-left">ถึงวันที่</th>
+      <th class="py-2 px-3 text-left">ประเภท</th>
+      <th class="py-2 px-3 text-left">เหตุผล</th>
+      <th class="py-2 px-3 text-left">สถานะ</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for l in leave_list %}
+    <tr class="odd:bg-gray-100">
+      <td class="py-2 px-3 text-center">
+        <a href="{{ url_for('hrm.leaves', edit_id=l.id) }}" class="text-blue-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></a>
+      </td>
+      <td class="py-2 px-3">{{ l.full_name }}</td>
+      <td class="py-2 px-3">{{ l.start_date or '' }}</td>
+      <td class="py-2 px-3">{{ l.end_date or '' }}</td>
+      <td class="py-2 px-3">{{ l.leave_type or '' }}</td>
+      <td class="py-2 px-3">{{ l.reason or '' }}</td>
+      <td class="py-2 px-3">{{ l.status or '' }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="py-3 px-3 text-center text-gray-600">ไม่พบข้อมูล</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% if message %}
+<p class="mt-4 text-center text-green-700"><i class="fa-solid fa-circle-info mr-1"></i>{{ message }}</p>
+{% endif %}
+
+<div id="editModal" class="fixed inset-0 bg-black/30 hidden justify-start items-start overflow-auto">
+  <div id="modalBox" class="bg-white p-6 rounded shadow-lg w-full max-w-xl mx-auto mt-10 transform transition-all duration-300 -translate-y-10 opacity-0">
+    <form method="post" class="space-y-4">
+      <input type="hidden" name="id" value="{{ edit_record.id if edit_record else '' }}" />
+      <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-plane-departure"></i>
+        {% if edit_record %}แก้ไขการลา{% else %}เพิ่มการลา{% endif %}
+      </h2>
+      <div>
+        <label class="block text-sm mb-1">พนักงาน</label>
+        <select name="staff_id" class="border border-gray-300 rounded px-3 py-2 w-full" required>
+          <option value="">- เลือก -</option>
+          {% for s in staff_list %}
+          <option value="{{ s.id }}" {% if edit_record and s.id==edit_record.staff_id %}selected{% endif %}>{{ s.full_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm mb-1">จากวันที่</label>
+          <input type="date" name="start_date" value="{{ edit_record.start_date if edit_record else '' }}" class="border border-gray-300 rounded px-3 py-2 w-full">
+        </div>
+        <div>
+          <label class="block text-sm mb-1">ถึงวันที่</label>
+          <input type="date" name="end_date" value="{{ edit_record.end_date if edit_record else '' }}" class="border border-gray-300 rounded px-3 py-2 w-full">
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">ประเภทการลา</label>
+        <select name="leave_type" class="border border-gray-300 rounded px-3 py-2 w-full">
+          {% set types=['ลาป่วย','ลากิจ','ลาพักร้อน','อื่นๆ'] %}
+          {% for t in types %}
+          <option value="{{ t }}" {% if edit_record and edit_record.leave_type==t %}selected{% endif %}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">เหตุผล</label>
+        <textarea name="reason" class="border border-gray-300 rounded px-3 py-2 w-full">{{ edit_record.reason if edit_record else '' }}</textarea>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">สถานะ</label>
+        <select name="status" class="border border-gray-300 rounded px-3 py-2 w-full">
+          {% set statuses=['รอดำเนินการ','อนุมัติ','ไม่อนุมัติ'] %}
+          {% for s in statuses %}
+          <option value="{{ s }}" {% if edit_record and edit_record.status==s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="flex gap-2">
+        <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 flex items-center gap-1"><i class="fa-solid fa-floppy-disk"></i>บันทึก</button>
+        {% if edit_record %}
+        <a href="{{ url_for('hrm.leaves') }}" class="px-4 py-2 rounded border border-gray-300 text-gray-600 hover:bg-gray-50">ยกเลิก</a>
+        {% endif %}
+        <button type="button" onclick="closeModal()" class="ml-auto px-4 py-2 text-gray-500 hover:underline">ปิด</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openModal(){
+  const m=document.getElementById('editModal');
+  const box=document.getElementById('modalBox');
+  m.classList.remove('hidden');
+  setTimeout(()=>{box.classList.remove('-translate-y-10','opacity-0');},10);
+}
+function closeModal(){
+  const m=document.getElementById('editModal');
+  const box=document.getElementById('modalBox');
+  box.classList.add('-translate-y-10','opacity-0');
+  setTimeout(()=>{m.classList.add('hidden');},300);
+}
+{% if open_modal %}window.addEventListener('load',openModal);{% endif %}
+$(document).ready(function(){
+    $('#leaveTable').DataTable({
+      language:{url:'{{ url_for('static', filename='datatables/i18n/th.json') }}'},
+      pageLength:25,
+      lengthMenu:[[25,50,75,100,-1],[25,50,75,100,'ทั้งหมด']]
+    });
+});
+</script>
+{% endblock %}
