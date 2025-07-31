@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2">
+  <i class="fa-solid fa-comments"></i>
+  <span>บันทึกพฤติกรรม</span>
+</h1>
+<table id="behaviorsTable" class="min-w-full bg-white border border-gray-300 text-sm">
+  <thead class="bg-blue-800 text-white">
+    <tr>
+      <th class="py-2 px-3 text-left">ชื่อ-สกุล</th>
+      <th class="py-2 px-3 text-left">วันที่</th>
+      <th class="py-2 px-3 text-left">พฤติกรรม</th>
+      <th class="py-2 px-3 text-left">หมายเหตุ</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for b in behaviors %}
+    <tr class="odd:bg-gray-100">
+      <td class="py-2 px-3">{{ b.full_name }}</td>
+      <td class="py-2 px-3">{{ b.behavior_date }}</td>
+      <td class="py-2 px-3">{{ b.description or '' }}</td>
+      <td class="py-2 px-3">{{ b.note or '' }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="4" class="py-3 px-3 text-center text-gray-600">ไม่พบข้อมูล</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<script>
+$(document).ready(function(){
+  $('#behaviorsTable').DataTable({
+    language:{url:'{{ url_for('static', filename='datatables/i18n/th.json') }}'},
+    pageLength:25,
+    lengthMenu:[[25,50,75,100,-1],[25,50,75,100,'ทั้งหมด']]
+  });
+});
+</script>
+{% endblock %}
