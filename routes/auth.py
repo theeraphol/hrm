@@ -60,3 +60,10 @@ def authorize():
     userinfo = oauth.sso.parse_id_token(token)
     session['staff_user'] = userinfo.get('name') or userinfo.get('preferred_username')
     return redirect(url_for('hrm.index'))
+
+
+@bp.route('/logout')
+def logout():
+    """Clear user session and redirect to login page."""
+    session.pop('staff_user', None)
+    return redirect(url_for('hrm.login'))

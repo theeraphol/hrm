@@ -113,10 +113,12 @@
       <div class="flex items-center gap-4 text-sm">
         {% if session.get('staff_user') %}
           <span><i class="fa-solid fa-user mr-1"></i>{{ session.staff_user }}</span>
+          <a href="{{ url_for('hrm.logout') }}" class="underline">ออกจากระบบ</a>
+        {% else %}
+          <a href="{{ url_for('hrm.login') }}" class="underline">
+            <i class="fa-solid fa-right-to-bracket mr-1"></i>เข้าสู่ระบบ
+          </a>
         {% endif %}
-        <a href="{{ url_for('hrm.login') }}" class="underline">
-          {% if session.get('staff_user') %}ออกจากระบบ{% else %}<i class="fa-solid fa-right-to-bracket mr-1"></i>เข้าสู่ระบบ{% endif %}
-        </a>
       </div>
     </header>
     <main class="p-6 flex-1">
