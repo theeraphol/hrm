@@ -4,6 +4,15 @@
 <div class="mb-4">
   <a href="{{ url_for('hrm.history', add=1) }}" class="bg-green-700 text-white px-3 py-2 rounded hover:bg-green-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i>เพิ่มข้อมูล</a>
 </div>
+<div class="mb-4 flex items-center gap-2">
+  <label class="text-sm">หน่วยงาน</label>
+  <select id="deptFilter" class="border border-gray-300 rounded px-2 py-1 text-sm">
+    <option value="">ทั้งหมด</option>
+    {% for d in departments %}
+    <option value="{{ d.dept_name }}">{{ d.dept_name }}</option>
+    {% endfor %}
+  </select>
+</div>
 <table id="historyTable" class="datatable min-w-full bg-white border border-gray-300 text-sm">
   <thead class="bg-blue-800 text-white">
     <tr>
@@ -121,5 +130,11 @@ function closeModal(){
 }
 {% if open_modal %}window.addEventListener('load',openModal);{% endif %}
 </script>
-
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('deptFilter').addEventListener('change', function(){
+  dt.column(4).search(this.value).draw();
+});
+</script>
 {% endblock %}

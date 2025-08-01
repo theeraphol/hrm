@@ -149,13 +149,15 @@
       });
     });
 
-    // Initialize datatables
-    $('table.datatable').DataTable({
+    // Initialize datatables and expose instance
+    const dt = $('table.datatable').DataTable({
       responsive: true,
       language:{url:'{{ url_for('static', filename='datatables/i18n/th.json') }}'},
       pageLength:25,
       lengthMenu:[[25,50,75,100,-1],[25,50,75,100,'ทั้งหมด']]
     });
+    window.dt = dt;
   </script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

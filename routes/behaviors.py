@@ -8,15 +8,18 @@ def behaviors():
         return redirect(url_for('hrm.login'))
 
     conn = get_connection()
+    departments = []
     try:
         with conn.cursor() as cur:
             cur.execute(
-                'SELECT b.id, s.full_name, b.behavior_date, b.description, b.note '
+                'SELECT b.id, s.full_name, s.department, b.behavior_date, b.description, b.note '
                 'FROM behaviors b JOIN staff s ON b.staff_id=s.id '
                 'ORDER BY b.behavior_date DESC, b.id DESC'
             )
             rows = cur.fetchall()
+            cur.execute('SELECT dept_name FROM departments ORDER BY dept_code')
+            departments = cur.fetchall()
     finally:
         conn.close()
 
-    return render_template('behaviors.html', behaviors=rows, title='บันทึกพฤติกรรม')
+    return render_template('behaviors.html', behaviors=rows, departments=departments, title='บันทึกพฤติกรรม')

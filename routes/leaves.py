@@ -10,6 +10,7 @@ def leaves():
     message = ''
     edit_record = None
     open_modal = False
+    departments = []
     conn = get_connection()
     try:
         if request.method == 'POST':
@@ -48,12 +49,15 @@ def leaves():
 
         with conn.cursor() as cur:
             cur.execute(
-                'SELECT l.*, s.full_name FROM leaves l JOIN staff s ON l.staff_id=s.id ORDER BY l.start_date DESC'
+                'SELECT l.*, s.full_name, s.department FROM leaves l JOIN staff s ON l.staff_id=s.id ORDER BY l.start_date DESC'
             )
             rows = cur.fetchall()
 
             cur.execute('SELECT id, full_name FROM staff ORDER BY full_name')
             staff_rows = cur.fetchall()
+
+            cur.execute('SELECT dept_name FROM departments ORDER BY dept_code')
+            departments = cur.fetchall()
     finally:
         conn.close()
 
@@ -61,6 +65,7 @@ def leaves():
         'leaves.html',
         leave_list=rows,
         staff_list=staff_rows,
+        departments=departments,
         edit_record=edit_record,
         message=message,
         open_modal=open_modal,

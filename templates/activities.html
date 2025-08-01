@@ -30,10 +30,20 @@
 {% if message %}
 <p class="text-center text-green-700 mb-4"><i class="fa-solid fa-circle-info mr-1"></i>{{ message }}</p>
 {% endif %}
+<div class="mb-4 flex items-center gap-2">
+  <label class="text-sm">หน่วยงาน</label>
+  <select id="deptFilter" class="border border-gray-300 rounded px-2 py-1 text-sm">
+    <option value="">ทั้งหมด</option>
+    {% for d in departments %}
+    <option value="{{ d.dept_name }}">{{ d.dept_name }}</option>
+    {% endfor %}
+  </select>
+</div>
 <table class="datatable min-w-full bg-white border border-gray-300 text-sm">
   <thead class="bg-blue-800 text-white">
     <tr>
       <th class="py-2 px-3 text-left">ชื่อ-สกุล</th>
+      <th class="py-2 px-3 hidden">หน่วยงาน</th>
       <th class="py-2 px-3 text-left">กิจกรรม</th>
       <th class="py-2 px-3 text-left">วันที่</th>
       <th class="py-2 px-3 text-left">รายละเอียด</th>
@@ -43,6 +53,7 @@
     {% for a in activities %}
     <tr class="odd:bg-gray-100">
       <td class="py-2 px-3">{{ a.full_name }}</td>
+      <td class="py-2 px-3 hidden">{{ a.department or '' }}</td>
       <td class="py-2 px-3">{{ a.activity_name }}</td>
       <td class="py-2 px-3">{{ a.activity_date }}</td>
       <td class="py-2 px-3">{{ a.description or '' }}</td>
@@ -52,4 +63,11 @@
     {% endfor %}
   </tbody>
 </table>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('deptFilter').addEventListener('change', function(){
+  dt.column(1).search(this.value).draw();
+});
+</script>
 {% endblock %}

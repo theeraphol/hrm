@@ -4,10 +4,20 @@
   <i class="fa-solid fa-comments"></i>
   <span>บันทึกพฤติกรรม</span>
 </h1>
+<div class="mb-4 flex items-center gap-2">
+  <label class="text-sm">หน่วยงาน</label>
+  <select id="deptFilter" class="border border-gray-300 rounded px-2 py-1 text-sm">
+    <option value="">ทั้งหมด</option>
+    {% for d in departments %}
+    <option value="{{ d.dept_name }}">{{ d.dept_name }}</option>
+    {% endfor %}
+  </select>
+</div>
 <table id="behaviorsTable" class="datatable min-w-full bg-white border border-gray-300 text-sm">
   <thead class="bg-blue-800 text-white">
     <tr>
       <th class="py-2 px-3 text-left">ชื่อ-สกุล</th>
+      <th class="py-2 px-3 hidden">หน่วยงาน</th>
       <th class="py-2 px-3 text-left">วันที่</th>
       <th class="py-2 px-3 text-left">พฤติกรรม</th>
       <th class="py-2 px-3 text-left">หมายเหตุ</th>
@@ -17,6 +27,7 @@
     {% for b in behaviors %}
     <tr class="odd:bg-gray-100">
       <td class="py-2 px-3">{{ b.full_name }}</td>
+      <td class="py-2 px-3 hidden">{{ b.department or '' }}</td>
       <td class="py-2 px-3">{{ b.behavior_date }}</td>
       <td class="py-2 px-3">{{ b.description or '' }}</td>
       <td class="py-2 px-3">{{ b.note or '' }}</td>
@@ -25,5 +36,12 @@
   </tbody>
 </table>
 <script>
+</script>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('deptFilter').addEventListener('change', function(){
+  dt.column(1).search(this.value).draw();
+});
 </script>
 {% endblock %}

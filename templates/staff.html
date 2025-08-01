@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block body %}
 <h1 class="text-2xl font-bold text-blue-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-address-card"></i><span>ข้อมูลบุคลากร</span></h1>
+<div class="mb-4 flex items-center gap-2">
+  <label class="text-sm">หน่วยงาน</label>
+  <select id="deptFilter" class="border border-gray-300 rounded px-2 py-1 text-sm">
+    <option value="">ทั้งหมด</option>
+    {% for d in departments %}
+    <option value="{{ d.dept_name }}">{{ d.dept_name }}</option>
+    {% endfor %}
+  </select>
+</div>
 <table class="datatable min-w-full bg-white border border-gray-300 text-sm">
   <thead class="bg-blue-800 text-white">
     <tr>
@@ -35,4 +44,11 @@
     {% endfor %}
   </tbody>
 </table>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('deptFilter').addEventListener('change', function(){
+  dt.column(4).search(this.value).draw();
+});
+</script>
 {% endblock %}

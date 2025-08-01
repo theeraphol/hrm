@@ -57,7 +57,7 @@ def trainings():
             open_modal = True
 
         with conn.cursor() as cur:
-            cur.execute('SELECT t.*, s.full_name FROM trainings t JOIN staff s ON t.staff_id=s.id ORDER BY t.id')
+            cur.execute('SELECT t.*, s.full_name, s.department FROM trainings t JOIN staff s ON t.staff_id=s.id ORDER BY t.id')
             rows = cur.fetchall()
     finally:
         conn.close()
