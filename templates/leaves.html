@@ -7,7 +7,7 @@
 <div class="mb-4">
   <a href="{{ url_for('hrm.leaves', add=1) }}" class="bg-green-700 text-white px-3 py-2 rounded hover:bg-green-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i>เพิ่มข้อมูล</a>
 </div>
-<table id="leaveTable" class="min-w-full bg-white border border-gray-300 text-sm">
+<table id="leaveTable" class="datatable min-w-full bg-white border border-gray-300 text-sm">
   <thead class="bg-blue-800 text-white">
     <tr>
       <th class="py-2 px-3 text-center"></th>
@@ -113,12 +113,5 @@ function closeModal(){
   setTimeout(()=>{m.classList.add('hidden');},300);
 }
 {% if open_modal %}window.addEventListener('load',openModal);{% endif %}
-$(document).ready(function(){
-    $('#leaveTable').DataTable({
-      language:{url:'{{ url_for('static', filename='datatables/i18n/th.json') }}'},
-      pageLength:25,
-      lengthMenu:[[25,50,75,100,-1],[25,50,75,100,'ทั้งหมด']]
-    });
-});
 </script>
 {% endblock %}
