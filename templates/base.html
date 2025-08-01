@@ -120,9 +120,20 @@
   <script>
     const menuBtn = document.getElementById('menu-btn');
     const sidebar = document.getElementById('sidebar');
+
     menuBtn?.addEventListener('click', () => {
       sidebar.classList.toggle('-translate-x-full');
     });
+
+    // ปิดเมนูเมื่อคลิกภายนอกในหน้าจอขนาดเล็ก
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth < 640 &&
+          !sidebar.contains(e.target) &&
+          !menuBtn.contains(e.target)) {
+        sidebar.classList.add('-translate-x-full');
+      }
+    });
+
     document.querySelectorAll('button[data-target]').forEach(btn => {
       btn.addEventListener('click', () => {
         const target = document.getElementById(btn.dataset.target);
