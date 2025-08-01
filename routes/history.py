@@ -10,6 +10,7 @@ def history():
     message = ''
     edit_record = None
     open_modal = False
+    departments = []
     conn = get_connection()
     try:
         if request.method == 'POST':
@@ -42,6 +43,10 @@ def history():
                     message = 'เพิ่มข้อมูลเรียบร้อยแล้ว'
                 conn.commit()
 
+        with conn.cursor() as cur:
+            cur.execute('SELECT dept_name FROM departments ORDER BY dept_code')
+            departments = cur.fetchall()
+
         edit_id = request.args.get('edit_id')
         if edit_id:
             with conn.cursor() as cur:
@@ -60,6 +65,7 @@ def history():
         'history.html',
         history_list=rows,
         edit_record=edit_record,
+        departments=departments,
         message=message,
         open_modal=open_modal,
         title='ประวัติพนักงาน',
