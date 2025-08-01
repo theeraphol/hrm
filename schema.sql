@@ -15,6 +15,12 @@ CREATE TABLE IF NOT EXISTS staff (
     email VARCHAR(100),
     phone VARCHAR(20)
 );
+-- เพิ่มคอลัมน์ในกรณีอัพเกรดระบบ
+ALTER TABLE staff
+    ADD COLUMN IF NOT EXISTS division VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS note TEXT,
+    ADD COLUMN IF NOT EXISTS email VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS phone VARCHAR(20);
 
 -- บันทึกเวลาเข้างาน/ออกงาน
 CREATE TABLE IF NOT EXISTS attendances (
@@ -26,6 +32,9 @@ CREATE TABLE IF NOT EXISTS attendances (
     note TEXT,
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
+-- เพิ่มคอลัมน์สถานะการทำงานหากยังไม่มี
+ALTER TABLE attendances
+    ADD COLUMN IF NOT EXISTS work_status TINYINT DEFAULT 2;
 
 -- การลา
 CREATE TABLE IF NOT EXISTS leaves (
@@ -84,3 +93,9 @@ CREATE TABLE IF NOT EXISTS employee_histories (
     note TEXT,
     phone VARCHAR(20)
 );
+-- ตารางนี้อาจถูกเพิ่มในภายหลัง จึงใช้ ALTER TABLE เพื่อเพิ่มคอลัมน์ใหม่เมื่อจำเป็น
+ALTER TABLE employee_histories
+    ADD COLUMN IF NOT EXISTS email VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS division VARCHAR(100),
+    ADD COLUMN IF NOT EXISTS note TEXT,
+    ADD COLUMN IF NOT EXISTS phone VARCHAR(20);
