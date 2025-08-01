@@ -51,7 +51,7 @@
         <select id="deptSelect" class="border border-gray-300 rounded px-3 py-2 w-full">
           <option value="">-เลือกหน่วยงาน-</option>
           {% for d in departments %}
-          <option value="{{ d }}">{{ d or 'ไม่ระบุ' }}</option>
+          <option value="{{ d.dept_name }}">{{ d.dept_name }}</option>
           {% endfor %}
         </select>
       </div>

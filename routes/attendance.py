@@ -15,8 +15,8 @@ def attendance():
     conn = get_connection()
     try:
         with conn.cursor() as cur:
-            cur.execute('SELECT DISTINCT department FROM staff ORDER BY department')
-            departments = [row['department'] or '' for row in cur.fetchall()]
+            cur.execute('SELECT dept_name FROM departments ORDER BY dept_code')
+            departments = [row['dept_name'] for row in cur.fetchall()]
 
             cur.execute('SELECT id, full_name, department FROM staff ORDER BY department, full_name')
             rows = cur.fetchall()

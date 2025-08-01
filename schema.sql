@@ -2,6 +2,21 @@
 CREATE DATABASE IF NOT EXISTS hrm CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE hrm;
 
+-- หน่วยงาน
+CREATE TABLE IF NOT EXISTS departments (
+    dept_code VARCHAR(20) PRIMARY KEY,
+    dept_name VARCHAR(100) NOT NULL,
+    description TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO departments (dept_code, dept_name) VALUES
+    ('1','สำนักปลัด'),
+    ('2','กองคลัง'),
+    ('3','กองช่าง'),
+    ('4','กองสาธารณสุขและสิ่งแวดล้อม'),
+    ('5','กองการศึกษา'),
+    ('6','กองสวัสดิการสังคม');
+
 -- ข้อมูลบุคลากร
 CREATE TABLE IF NOT EXISTS staff (
     id INT AUTO_INCREMENT PRIMARY KEY,
