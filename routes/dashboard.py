@@ -31,7 +31,7 @@ def index():
         conn.close()
 
     return render_template(
-        'index.html',
+        'dashboard/index.html',
         title='หน้าหลัก',
         staff_count=staff_count,
         today_attendance=today_attendance,
