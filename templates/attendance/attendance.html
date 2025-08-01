@@ -63,9 +63,19 @@
     <button type="submit" class="bg-blue-700 text-white px-6 py-2 rounded hover:bg-blue-800 flex items-center gap-1"><i class="fa-solid fa-floppy-disk"></i> บันทึกทั้งหมด</button>
   </div>
 </form>
-{% if message %}
-<p class="mt-4 text-center text-green-700"><i class="fa-solid fa-circle-info mr-1"></i>{{ message }}</p>
-{% endif %}
+  {% if message %}
+  <div id="saveModal" class="fixed inset-x-0 top-0 flex justify-center z-50">
+    <div class="bg-emerald-600 text-white px-4 py-2 shadow rounded-b transition-transform transform -translate-y-full flex items-center gap-2">
+      <i class="fa-solid fa-circle-check"></i>
+      <span>{{ message }}</span>
+    </div>
+  </div>
+  <script>
+    const m=document.getElementById('saveModal').firstElementChild;
+    setTimeout(()=>m.classList.remove('-translate-y-full'),100);
+    setTimeout(()=>m.classList.add('-translate-y-full'),3000);
+  </script>
+  {% endif %}
 <script>
   document.querySelectorAll('#deptTabs button').forEach(btn => {
     btn.addEventListener('click', () => {

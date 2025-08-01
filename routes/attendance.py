@@ -69,7 +69,7 @@ def attendance():
     finally:
         conn.close()
 
-    return render_template('attendance.html',
+    return render_template('attendance/attendance.html',
                            departments=departments,
                            staff_by_dept=staff_by_dept,
                            attendance=attendance_map,
@@ -95,7 +95,7 @@ def attendance_stats():
 
     labels = [str(r['y']) for r in rows]
     counts = [r['c'] for r in rows]
-    return render_template('attendance_stats.html',
+    return render_template('attendance/stats.html',
                            labels=json.dumps(labels),
                            counts=json.dumps(counts),
                            title='สถิติการเข้างาน')
