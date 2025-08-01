@@ -7,11 +7,21 @@
 <div class="mb-4">
   <a href="{{ url_for('hrm.leaves', add=1) }}" class="bg-green-700 text-white px-3 py-2 rounded hover:bg-green-800 flex items-center gap-1"><i class="fa-solid fa-plus"></i>เพิ่มข้อมูล</a>
 </div>
+<div class="mb-4 flex items-center gap-2">
+  <label class="text-sm">หน่วยงาน</label>
+  <select id="deptFilter" class="border border-gray-300 rounded px-2 py-1 text-sm">
+    <option value="">ทั้งหมด</option>
+    {% for d in departments %}
+    <option value="{{ d.dept_name }}">{{ d.dept_name }}</option>
+    {% endfor %}
+  </select>
+</div>
 <table id="leaveTable" class="datatable min-w-full bg-white border border-gray-300 text-sm">
   <thead class="bg-blue-800 text-white">
     <tr>
       <th class="py-2 px-3 text-center"></th>
       <th class="py-2 px-3 text-left">พนักงาน</th>
+      <th class="py-2 px-3 hidden">หน่วยงาน</th>
       <th class="py-2 px-3 text-left">จากวันที่</th>
       <th class="py-2 px-3 text-left">ถึงวันที่</th>
       <th class="py-2 px-3 text-left">ประเภท</th>
@@ -26,6 +36,7 @@
         <a href="{{ url_for('hrm.leaves', edit_id=l.id) }}" class="text-blue-600 hover:underline"><i class="fa-solid fa-pen-to-square"></i></a>
       </td>
       <td class="py-2 px-3">{{ l.full_name }}</td>
+      <td class="py-2 px-3 hidden">{{ l.department or '' }}</td>
       <td class="py-2 px-3">{{ l.start_date or '' }}</td>
       <td class="py-2 px-3">{{ l.end_date or '' }}</td>
       <td class="py-2 px-3">{{ l.leave_type or '' }}</td>
@@ -113,5 +124,12 @@ function closeModal(){
   setTimeout(()=>{m.classList.add('hidden');},300);
 }
 {% if open_modal %}window.addEventListener('load',openModal);{% endif %}
+</script>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('deptFilter').addEventListener('change', function(){
+  dt.column(2).search(this.value).draw();
+});
 </script>
 {% endblock %}
