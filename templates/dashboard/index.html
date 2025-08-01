@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+  <i class="fa-solid fa-table-columns"></i>
+  <span>แดชบอร์ด</span>
+</h1>
+<div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+  <a href="{{ url_for('hrm.staff') }}" class="p-6 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-blue-50 flex items-center gap-4">
+    <i class="fa-solid fa-users text-4xl text-blue-700"></i>
+    <div>
+      <div class="text-slate-500">บุคลากรทั้งหมด</div>
+      <div class="text-2xl font-semibold">{{ staff_count }}</div>
+    </div>
+  </a>
+  <a href="{{ url_for('hrm.attendance') }}" class="p-6 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-blue-50 flex items-center gap-4">
+    <i class="fa-solid fa-clock text-4xl text-orange-600"></i>
+    <div>
+      <div class="text-slate-500">บันทึกเวลาวันนี้</div>
+      <div class="text-2xl font-semibold">{{ today_attendance }}</div>
+    </div>
+  </a>
+  <a href="{{ url_for('hrm.leaves') }}" class="p-6 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-blue-50 flex items-center gap-4">
+    <i class="fa-solid fa-plane-departure text-4xl text-teal-600"></i>
+    <div>
+      <div class="text-slate-500">การลา</div>
+      <div class="text-2xl font-semibold">{{ leave_count }}</div>
+    </div>
+  </a>
+  <a href="{{ url_for('hrm.trainings') }}" class="p-6 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-blue-50 flex items-center gap-4">
+    <i class="fa-solid fa-graduation-cap text-4xl text-indigo-600"></i>
+    <div>
+      <div class="text-slate-500">อบรม/ดูงาน</div>
+      <div class="text-2xl font-semibold">{{ training_count }}</div>
+    </div>
+  </a>
+  <a href="{{ url_for('hrm.activities') }}" class="p-6 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-blue-50 flex items-center gap-4">
+    <i class="fa-solid fa-people-group text-4xl text-emerald-600"></i>
+    <div>
+      <div class="text-slate-500">กิจกรรม</div>
+      <div class="text-2xl font-semibold">{{ activity_count }}</div>
+    </div>
+  </a>
+  <a href="{{ url_for('hrm.behaviors') }}" class="p-6 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-blue-50 flex items-center gap-4">
+    <i class="fa-solid fa-comments text-4xl text-purple-600"></i>
+    <div>
+      <div class="text-slate-500">บันทึกพฤติกรรม</div>
+      <div class="text-2xl font-semibold">{{ behavior_count }}</div>
+    </div>
+  </a>
+</div>
+{% endblock %}
