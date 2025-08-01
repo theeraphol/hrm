@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS attendances (
     staff_id INT NOT NULL,
     checkin_time DATETIME,
     checkout_time DATETIME,
+    work_status TINYINT DEFAULT 2,
     note TEXT,
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );

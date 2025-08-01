@@ -25,7 +25,8 @@ def attendance():
                 dept = row['department'] or ''
                 staff_by_dept.setdefault(dept, []).append(row)
 
-            cur.execute('SELECT id, staff_id, checkin_time, checkout_time FROM attendances '
+            cur.execute('SELECT id, staff_id, checkin_time, checkout_time, work_status '
+                        'FROM attendances '
                         'WHERE DATE(checkin_time)=%s OR DATE(checkout_time)=%s',
                         (selected_date, selected_date))
             attendance_rows = cur.fetchall()
@@ -38,25 +39,28 @@ def attendance():
                         coid = f'checkout_{st["id"]}'
                         checkin = request.form.get(cid)
                         checkout = request.form.get(coid)
+                        status = request.form.get(f'status_{st["id"]}') or '2'
                         if st['id'] in attendance_map:
                             att_id = attendance_map[st['id']]['id']
                             cur.execute(
-                                'UPDATE attendances SET checkin_time=%s, checkout_time=%s WHERE id=%s',
+                                'UPDATE attendances SET checkin_time=%s, checkout_time=%s, work_status=%s WHERE id=%s',
                                 (f"{selected_date} {checkin}" if checkin else None,
                                  f"{selected_date} {checkout}" if checkout else None,
+                                 int(status),
                                  att_id)
                             )
-                        elif checkin or checkout:
+                        elif checkin or checkout or status:
                             cur.execute(
-                                'INSERT INTO attendances (staff_id, checkin_time, checkout_time)'
-                                ' VALUES (%s,%s,%s)',
+                                'INSERT INTO attendances (staff_id, checkin_time, checkout_time, work_status)'
+                                ' VALUES (%s,%s,%s,%s)',
                                 (st['id'],
                                  f"{selected_date} {checkin}" if checkin else None,
-                                 f"{selected_date} {checkout}" if checkout else None)
+                                 f"{selected_date} {checkout}" if checkout else None,
+                                 int(status))
                             )
                 conn.commit()
                 message = 'บันทึกข้อมูลเรียบร้อยแล้ว'
-                cur.execute('SELECT id, staff_id, checkin_time, checkout_time FROM attendances '
+                cur.execute('SELECT id, staff_id, checkin_time, checkout_time, work_status FROM attendances '
                             'WHERE DATE(checkin_time)=%s OR DATE(checkout_time)=%s',
                             (selected_date, selected_date))
                 attendance_rows = cur.fetchall()

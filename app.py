@@ -13,7 +13,8 @@ def inject_globals():
     return {
         'app_version': VERSION,
         'default_checkin': Config.DEFAULT_CHECKIN_TIME,
-        'default_checkout': Config.DEFAULT_CHECKOUT_TIME
+        'default_checkout': Config.DEFAULT_CHECKOUT_TIME,
+        'work_status': Config.WORK_STATUS,
     }
 
 # Initialize OAuth for SSO if configured
