@@ -43,11 +43,11 @@
               <input type="time" name="checkout_{{ s.id }}" value="{{ (attendance.get(s.id).checkout_time.strftime('%H:%M') if attendance.get(s.id) and attendance.get(s.id).checkout_time else default_checkout) }}" class="border border-gray-300 rounded px-2 py-1" />
             </td>
             <td class="py-2 px-3 text-center">
-              <div class="inline-flex flex-wrap gap-1 justify-center">
+              <div class="relative inline-flex align-middle">
                 {% for code, text in work_status.items() %}
-                <label>
+                <label class="-ml-px first:ml-0">
                   <input type="radio" name="status_{{ s.id }}" value="{{ code }}" class="peer sr-only" {% if attendance.get(s.id) and attendance.get(s.id).work_status==code %}checked{% elif not attendance.get(s.id) and code==2 %}checked{% endif %}>
-                  <span class="px-2 py-1 border rounded text-xs cursor-pointer peer-checked:bg-blue-600 peer-checked:text-white">{{ text }}</span>
+                  <span class="px-2 py-1 border border-gray-600 bg-gray-700 text-white text-xs cursor-pointer rounded-none first:rounded-l last:rounded-r peer-checked:bg-blue-600 peer-checked:border-blue-600">{{ text }}</span>
                 </label>
                 {% endfor %}
               </div>

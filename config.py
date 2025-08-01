@@ -3,7 +3,7 @@ import os
 class Config:
     """การตั้งค่าสำหรับแอปพลิเคชัน"""
 
-    VERSION = "0.37.0"
+    VERSION = "0.38.0"
 
     # รหัสสถานะการมาทำงาน
     WORK_STATUS = {
