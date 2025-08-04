@@ -85,6 +85,16 @@ CREATE TABLE IF NOT EXISTS activities (
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
 
+-- โครงการ
+CREATE TABLE IF NOT EXISTS projects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    project_name VARCHAR(200) NOT NULL,
+    start_date DATE,
+    end_date DATE,
+    status VARCHAR(100),
+    description TEXT
+);
+
 -- พฤติกรรม/หมายเหตุ
 CREATE TABLE IF NOT EXISTS behaviors (
     id INT AUTO_INCREMENT PRIMARY KEY,
