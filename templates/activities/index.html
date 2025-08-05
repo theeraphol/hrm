@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold flex items-center gap-2">
+    <i class="fa-solid fa-people-group text-emerald-700"></i>
+    <span>กิจกรรม</span>
+  </h1>
+  <button id="open-modal" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 flex items-center gap-1">
+    <i class="fa-solid fa-plus"></i> เพิ่มกิจกรรม
+  </button>
+</div>
+{% if message %}
+<p class="text-center text-green-700 mb-4"><i class="fa-solid fa-circle-info mr-1"></i>{{ message }}</p>
+{% endif %}
+<div class="mb-4 flex items-center gap-2 flex-wrap">
+  <span class="text-sm">หน่วยงาน</span>
+  <button type="button" data-dept="" class="dept-btn px-3 py-1 rounded border text-sm bg-blue-700 text-white">
+    <i class="fa-solid fa-filter mr-1"></i>ทั้งหมด
+  </button>
+  {% for d in departments %}
+  <button type="button" data-dept="{{ d.dept_name }}" class="dept-btn px-3 py-1 rounded border text-sm bg-white hover:bg-blue-50">
+    {{ d.dept_name }}
+  </button>
+  {% endfor %}
+</div>
+<table class="datatable min-w-full bg-white border border-gray-300 text-sm">
+  <thead class="bg-blue-800 text-white">
+    <tr>
+      <th class="py-2 px-3 text-left">ชื่อ-สกุล</th>
+      <th class="py-2 px-3 hidden">หน่วยงาน</th>
+      <th class="py-2 px-3 text-left">กิจกรรม</th>
+      <th class="py-2 px-3 text-left">วันที่</th>
+      <th class="py-2 px-3 text-left">รายละเอียด</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for a in activities %}
+    <tr class="odd:bg-gray-100">
+      <td class="py-2 px-3">{{ a.full_name }}</td>
+      <td class="py-2 px-3 hidden">{{ a.department or '' }}</td>
+      <td class="py-2 px-3">{{ a.activity_name }}</td>
+      <td class="py-2 px-3">{{ a.activity_date }}</td>
+      <td class="py-2 px-3">{{ a.description or '' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div id="activity-modal" class="fixed inset-0 bg-black/50 hidden justify-center items-start z-50">
+  <form method="post" class="bg-white rounded shadow-lg w-full max-w-md p-6 mt-10 transform -translate-y-10 opacity-0 transition-all duration-300">
+    <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+      <i class="fa-solid fa-pen-to-square text-blue-700"></i> บันทึกกิจกรรม
+    </h2>
+    <div class="space-y-4">
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium">บุคลากร</label>
+        <select name="staff_id" class="border border-gray-300 rounded px-3 py-1">
+          {% for s in staff_list %}
+          <option value="{{ s.id }}">{{ s.full_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium">กิจกรรม</label>
+        <input type="text" name="activity_name" class="border border-gray-300 rounded px-3 py-1 flex-1" required>
+      </div>
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium">วันที่</label>
+        <input type="date" name="activity_date" class="border border-gray-300 rounded px-3 py-1" required>
+      </div>
+      <div>
+        <label class="text-sm font-medium">รายละเอียด</label>
+        <textarea name="description" rows="3" class="border border-gray-300 rounded px-3 py-1 w-full"></textarea>
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 mt-4">
+      <button type="button" id="close-modal" class="px-4 py-2 rounded border">ยกเลิก</button>
+      <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 flex items-center gap-1"><i class="fa-solid fa-save"></i> บันทึก</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const deptBtns = document.querySelectorAll('.dept-btn');
+deptBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    deptBtns.forEach(b => b.classList.remove('bg-blue-700','text-white'));
+    btn.classList.add('bg-blue-700','text-white');
+    dt.column(1).search(btn.dataset.dept).draw();
+  });
+});
+
+const modal = document.getElementById('activity-modal');
+const openBtn = document.getElementById('open-modal');
+const closeBtn = document.getElementById('close-modal');
+openBtn.addEventListener('click', () => {
+  modal.classList.remove('hidden');
+  setTimeout(() => {
+    modal.querySelector('form').classList.remove('-translate-y-10','opacity-0');
+  }, 50);
+});
+function closeModal(){
+  const form = modal.querySelector('form');
+  form.classList.add('-translate-y-10','opacity-0');
+  setTimeout(() => modal.classList.add('hidden'), 200);
+}
+modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+closeBtn.addEventListener('click', closeModal);
+</script>
+{% endblock %}
