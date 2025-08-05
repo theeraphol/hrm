@@ -40,7 +40,7 @@ def activities():
         conn.close()
 
     return render_template(
-        'activities.html',
+        'activities/index.html',
         activities=rows,
         staff_list=staff_list,
         departments=departments,
